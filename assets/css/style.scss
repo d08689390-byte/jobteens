@@ -9,6 +9,15 @@ body {
   color: #222;
 }
 
+#logo-link {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+#logo-link:hover {
+  transform: scale(1.05);
+}
+
 #site-header {
   display: flex;
   justify-content: center;
