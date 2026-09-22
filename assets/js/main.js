@@ -3,6 +3,7 @@
 
 window.addEventListener("load", () => {
   const sound = document.getElementById("gba-sound");
+  if (!sound) return;
   const letters = [
     "l-J", "l-O", "l-B", "l-T",
     "l-E1", "l-E2", "l-N", "l-S"
@@ -61,11 +62,6 @@ setTimeout(() => {
   }, 300 * letters.length + 3500);
 });
 
-// reCAPTCHA for phone auth
-if (typeof setupRecaptcha === "function") {
-  setupRecaptcha();
-}
-
 // FILTERING ENGINE
 async function loadJobs() {
   const res = await fetch("{{ '/jobs.json' | relative_url }}");
@@ -97,7 +93,9 @@ function renderJobs(jobs) {
   });
 }
 
-document.getElementById("apply-filter").addEventListener("click", async () => {
+const applyFilter = document.getElementById("apply-filter");
+if (applyFilter) {
+applyFilter.addEventListener("click", async () => {
   const ageVal = document.getElementById("filter-age").value;
   const age = ageVal ? parseInt(ageVal, 10) : null;
   const location = document.getElementById("filter-location").value.trim();
@@ -106,9 +104,11 @@ document.getElementById("apply-filter").addEventListener("click", async () => {
   const filtered = jobs.filter(job => matchesFilter(job, age, location));
   renderJobs(filtered);
 });
+}
 
 // AUTH BUTTON HOOKS (using functions from firebase.js)
-document.getElementById("login-email").addEventListener("click", () => {
+const loginEmailButton = document.getElementById("login-email");
+if (loginEmailButton) loginEmailButton.addEventListener("click", () => {
   const email = prompt("Email:");
   const password = prompt("Password:");
   loginEmail(email, password).then(() => {
@@ -116,7 +116,8 @@ document.getElementById("login-email").addEventListener("click", () => {
   }).catch(console.error);
 });
 
-document.getElementById("register-email").addEventListener("click", () => {
+const registerEmailButton = document.getElementById("register-email");
+if (registerEmailButton) registerEmailButton.addEventListener("click", () => {
   const email = prompt("Email:");
   const password = prompt("Password:");
   registerEmail(email, password).then(() => {
@@ -124,21 +125,43 @@ document.getElementById("register-email").addEventListener("click", () => {
   }).catch(console.error);
 });
 
-document.getElementById("login-google").addEventListener("click", () => {
+const loginGoogleButton = document.getElementById("login-google");
+if (loginGoogleButton) loginGoogleButton.addEventListener("click", () => {
+  setAuthMessage("Opening Google sign-in...", false);
   loginGoogle().then(() => {
-    console.log("Logged in with Google");
-  }).catch(console.error);
+    setAuthMessage("You are now logged in.", false);
+  }).catch((error) => setAuthMessage(error.message, true));
 });
 
-document.getElementById("login-github").addEventListener("click", () => {
+const loginGithubButton = document.getElementById("login-github");
+if (loginGithubButton) loginGithubButton.addEventListener("click", () => {
+  setAuthMessage("Opening GitHub sign-in...", false);
   loginGitHub().then(() => {
-    console.log("Logged in with GitHub");
-  }).catch(console.error);
+    setAuthMessage("You are now logged in.", false);
+  }).catch((error) => setAuthMessage(error.message, true));
 });
 
-document.getElementById("login-phone").addEventListener("click", () => {
+const loginPhoneButton = document.getElementById("login-phone");
+if (loginPhoneButton) loginPhoneButton.addEventListener("click", () => {
   const number = prompt("Enter phone number (+44...)");
-  loginPhone(number).then(() => {
-    console.log("Logged in with phone");
-  }).catch(console.error);
+  if (!number) return;
+  setAuthMessage("Complete the reCAPTCHA to receive your code.", false);
+  loginPhone(number)
+    .then((confirmationResult) => {
+      const code = prompt("Enter the SMS code you received:");
+      if (!code) return;
+      return confirmationResult.confirm(code);
+    })
+    .then(() => setAuthMessage("You are now logged in.", false))
+    .catch((error) => {
+      resetRecaptcha();
+      setAuthMessage(error.message, true);
+    });
 });
+
+function setAuthMessage(message, isError) {
+  const element = document.getElementById("auth-message");
+  if (!element) return;
+  element.textContent = message;
+  element.classList.toggle("auth-error", isError);
+}

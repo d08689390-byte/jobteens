@@ -35,13 +35,46 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 24px;
   padding: 20px 0;
   background: #ffffff;
+}
+
+#site-header nav {
+  display: flex;
+  gap: 12px;
+}
+
+#site-header nav a {
+  color: #0078ff;
 }
 
 #jobteens-logo {
   width: 320px;
   image-rendering: pixelated;
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0078ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+.profile-icon {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 /* ---------------------------------------------------------
@@ -178,6 +211,51 @@ button {
 
 button:hover {
   background: #005fcc;
+}
+
+.button-link {
+  display: inline-block;
+  padding: 10px 14px;
+  margin: 6px 0;
+  background: #0078ff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.button-link:hover {
+  background: #005fcc;
+}
+
+.auth-page {
+  max-width: 420px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.page-content {
+  max-width: 720px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.auth-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-page input {
+  padding: 10px;
+  font: inherit;
+}
+
+.auth-error {
+  color: #b00020;
+}
+
+#recaptcha-container {
+  margin: 12px 0;
 }
 
 /* Filter box */
