@@ -19,7 +19,6 @@ title: JobTeens
   </div>
 
   <div id="intro-tagline">Youth-powered jobs for The Youth</div>
-</div>
 
 # JobTeens
 
