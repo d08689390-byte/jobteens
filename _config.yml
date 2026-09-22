@@ -1,5 +1,6 @@
 title: JobTeens
 description: Teen job board
+baseurl: "/jobteens"
 markdown: kramdown
 
 collections:
