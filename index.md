@@ -5,6 +5,8 @@ title: JobTeens
 
 <!-- FULLSCREEN INTRO -->
 <div id="intro-screen">
+<div id="white-flash"></div>
+
   <audio id="gba-sound" src="/assets/audio/gba-startup.mp3"></audio>
 
   <div id="letters-container">
