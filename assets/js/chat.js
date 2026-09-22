@@ -38,15 +38,14 @@ sendBtn.addEventListener("click", async () => {
   const text = input.value.trim();
   if (!text) return;
 
-  await addDoc(
-    collection(doc(db, "conversations", conversationId), "messages"),
-    {
-      senderId: user.uid,
-      senderName: user.email,
-      text,
-      timestamp: serverTimestamp()
-    }
-  );
+ await addDoc(
+  collection(doc(db, "conversations", conversationId), "messages"),
+  {
+    senderId: user.uid,
+    senderName: user.email,
+    text,
+    timestamp: serverTimestamp(),
+    readBy: [user.uid]
+  }
+);
 
-  input.value = "";
-});
