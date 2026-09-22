@@ -3,6 +3,7 @@
 
 window.addEventListener("load", () => {
   const sound = document.getElementById("gba-sound");
+  if (!sound) return;
   const letters = [
     "l-J", "l-O", "l-B", "l-T",
     "l-E1", "l-E2", "l-N", "l-S"
@@ -97,7 +98,9 @@ function renderJobs(jobs) {
   });
 }
 
-document.getElementById("apply-filter").addEventListener("click", async () => {
+const applyFilter = document.getElementById("apply-filter");
+if (applyFilter) {
+applyFilter.addEventListener("click", async () => {
   const ageVal = document.getElementById("filter-age").value;
   const age = ageVal ? parseInt(ageVal, 10) : null;
   const location = document.getElementById("filter-location").value.trim();
@@ -106,9 +109,11 @@ document.getElementById("apply-filter").addEventListener("click", async () => {
   const filtered = jobs.filter(job => matchesFilter(job, age, location));
   renderJobs(filtered);
 });
+}
 
 // AUTH BUTTON HOOKS (using functions from firebase.js)
-document.getElementById("login-email").addEventListener("click", () => {
+const loginEmailButton = document.getElementById("login-email");
+if (loginEmailButton) loginEmailButton.addEventListener("click", () => {
   const email = prompt("Email:");
   const password = prompt("Password:");
   loginEmail(email, password).then(() => {
@@ -116,7 +121,8 @@ document.getElementById("login-email").addEventListener("click", () => {
   }).catch(console.error);
 });
 
-document.getElementById("register-email").addEventListener("click", () => {
+const registerEmailButton = document.getElementById("register-email");
+if (registerEmailButton) registerEmailButton.addEventListener("click", () => {
   const email = prompt("Email:");
   const password = prompt("Password:");
   registerEmail(email, password).then(() => {
@@ -124,19 +130,22 @@ document.getElementById("register-email").addEventListener("click", () => {
   }).catch(console.error);
 });
 
-document.getElementById("login-google").addEventListener("click", () => {
+const loginGoogleButton = document.getElementById("login-google");
+if (loginGoogleButton) loginGoogleButton.addEventListener("click", () => {
   loginGoogle().then(() => {
     console.log("Logged in with Google");
   }).catch(console.error);
 });
 
-document.getElementById("login-github").addEventListener("click", () => {
+const loginGithubButton = document.getElementById("login-github");
+if (loginGithubButton) loginGithubButton.addEventListener("click", () => {
   loginGitHub().then(() => {
     console.log("Logged in with GitHub");
   }).catch(console.error);
 });
 
-document.getElementById("login-phone").addEventListener("click", () => {
+const loginPhoneButton = document.getElementById("login-phone");
+if (loginPhoneButton) loginPhoneButton.addEventListener("click", () => {
   const number = prompt("Enter phone number (+44...)");
   loginPhone(number).then(() => {
     console.log("Logged in with phone");

@@ -30,10 +30,10 @@ title: JobTeens
 
 <h2>Account Login</h2>
 
-<div id="recaptcha-container"></div>
-
-<button id="login-email">Login with Email</button>
-<button id="register-email">Register with Email</button>
+<p>
+  <a class="button-link" href="{{ '/login.html' | relative_url }}">Login with Email</a>
+  <a class="button-link" href="{{ '/signup.html' | relative_url }}">Sign up with Email</a>
+</p>
 <button id="login-phone">Login with Phone</button>
 <button id="login-google">Login with Google</button>
 <button id="login-github">Login with GitHub</button>
