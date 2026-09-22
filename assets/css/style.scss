@@ -9,6 +9,19 @@ body {
   color: #222;
 }
 
+#site-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  background: #ffffff;
+}
+
+#jobteens-logo {
+  width: 320px;
+  image-rendering: pixelated;
+}
+
 /* ---------------------------------------------------------
    FULLSCREEN INTRO SCREEN
 --------------------------------------------------------- */
