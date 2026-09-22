@@ -24,11 +24,11 @@ title: JobTeens
 </div>
 
 <div id="site-content">
-# JobTeens
+<h1>JobTeens</h1>
 
-Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).
+<p>Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).</p>
 
-## Account Login
+<h2>Account Login</h2>
 
 <div id="recaptcha-container"></div>
 
@@ -38,7 +38,7 @@ Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 fo
 <button id="login-google">Login with Google</button>
 <button id="login-github">Login with GitHub</button>
 
-## Filter Jobs
+<h2>Filter Jobs</h2>
 
 <div id="filter-box">
   <label for="filter-age">Age:</label>
@@ -57,7 +57,7 @@ Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 fo
   <button id="apply-filter">Apply Filter</button>
 </div>
 
-## Job Listings
+<h2>Job Listings</h2>
 
 <div id="jobs-list"></div>
 

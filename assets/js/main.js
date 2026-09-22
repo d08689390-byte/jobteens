@@ -1,3 +1,6 @@
+---
+---
+
 window.addEventListener("load", () => {
   const sound = document.getElementById("gba-sound");
   const letters = [
@@ -58,20 +61,17 @@ setTimeout(() => {
   }, 300 * letters.length + 3500);
 });
 
-
-
-  // reCAPTCHA for phone auth
-  if (typeof setupRecaptcha === "function") {
-    setupRecaptcha();
-  }
-
-  // initial jobs load
-  loadJobs().then(renderJobs).catch(console.error);
-});
+// reCAPTCHA for phone auth
+if (typeof setupRecaptcha === "function") {
+  setupRecaptcha();
+}
 
 // FILTERING ENGINE
 async function loadJobs() {
-  const res = await fetch("/jobs.json");
+  const res = await fetch("{{ '/jobs.json' | relative_url }}");
+  if (!res.ok) {
+    throw new Error(`Unable to load jobs: ${res.status}`);
+  }
   return res.json();
 }
 
