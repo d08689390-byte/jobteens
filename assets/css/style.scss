@@ -26,15 +26,41 @@
   transition: transform 0.4s ease-out, opacity 0.3s ease-out;
 }
 
-/* TAGLINE */
+/* SLAM IMPACT */
+.slam {
+  animation: slamEffect 0.25s ease-out forwards;
+}
+
+@keyframes slamEffect {
+  0%   { transform: scale(1) translate(0, 0); }
+  50%  { transform: scale(1.4) translate(0, -10px); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+/* RAINBOW PIXEL LOGO */
+#letters-container.rainbow span {
+  background: linear-gradient(
+    90deg,
+    red, orange, yellow, green, cyan, blue, purple
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: contrast(200%) saturate(200%) brightness(120%);
+  image-rendering: pixelated;
+}
+
+/* PIXEL TAGLINE */
 #intro-tagline {
   margin-top: 20px;
   font-size: 20px;
   opacity: 0;
+  color: #222;
+  filter: contrast(200%) brightness(80%);
+  image-rendering: pixelated;
   transition: opacity 1s ease;
 }
 
-/* SITE CONTENT (hidden until animation ends) */
+/* SITE CONTENT */
 #site-content {
   display: none;
 }
