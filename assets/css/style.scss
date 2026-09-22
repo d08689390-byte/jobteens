@@ -1,55 +1,40 @@
-/* Startup screen */
-#startup-screen {
+/* FULLSCREEN INTRO */
+#intro-screen {
   position: fixed;
   inset: 0;
   background: black;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 9999;
+  color: white;
+  font-family: 'Verdana', sans-serif;
 }
 
-#jobteens-logo {
-  width: 220px;
+/* LETTERS */
+#letters-container {
+  display: flex;
+  gap: 10px;
+}
+
+.intro-letter {
+  font-size: 64px;
+  font-weight: 900;
   opacity: 0;
-  transform: translateY(0);
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform: scale(0.1) translate(-200px, -200px);
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
 }
 
-/* Filter UI */
-#filter-box {
+/* TAGLINE */
+#intro-tagline {
   margin-top: 20px;
-  padding: 15px;
-  background: #eaeaea;
-  border-radius: 6px;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
-#filter-box label {
-  display: block;
-  margin-top: 10px;
-}
-
-#filter-box select,
-#filter-box input {
-  width: 220px;
-  padding: 6px;
-  margin-top: 5px;
-}
-
-#apply-filter {
-  margin-top: 15px;
-  padding: 8px 12px;
-}
-
-/* Job cards */
-#jobs-list {
-  margin-top: 20px;
-}
-
-.job-card {
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffffff;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+/* SITE CONTENT (hidden until animation ends) */
+#site-content {
+  display: none;
 }
