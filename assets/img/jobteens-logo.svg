@@ -1,0 +1,13 @@
+<svg width="420" height="120" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="120" fill="#1a1a1a"/>
+  <text x="20" y="80"
+        font-family="Verdana, Geneva, sans-serif"
+        font-size="64"
+        font-weight="900"
+        fill="#ffffff"
+        stroke="#5a5a5a"
+        stroke-width="6"
+        style="paint-order: stroke fill;">
+    JobTeens
+  </text>
+</svg>
