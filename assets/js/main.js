@@ -4,6 +4,14 @@ window.addEventListener("load", () => {
     "l-J", "l-O", "l-B", "l-T",
     "l-E1", "l-E2", "l-N", "l-S"
   ];
+// WHITE FLASH EFFECT
+function whiteFlash() {
+  const flash = document.getElementById("white-flash");
+  flash.style.opacity = "1";
+  setTimeout(() => {
+    flash.style.opacity = "0";
+  }, 120);
+}
 
   // Play GBA sound
   sound.play().catch(() => {});
@@ -17,13 +25,15 @@ window.addEventListener("load", () => {
     }, 300 * index);
   });
 
-  // SLAM EFFECT (after all letters appear)
-  setTimeout(() => {
-    letters.forEach(id => {
-      const el = document.getElementById(id);
-      el.classList.add("slam");
-    });
-  }, 300 * letters.length + 200);
+  // SLAM EFFECT + WHITE FLASH
+setTimeout(() => {
+  letters.forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.add("slam");
+  });
+
+  whiteFlash(); // GBA-style flash
+}, 300 * letters.length + 200);
 
   // RAINBOW PIXEL MORPH
   setTimeout(() => {
