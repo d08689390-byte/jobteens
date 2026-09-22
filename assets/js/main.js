@@ -62,11 +62,6 @@ setTimeout(() => {
   }, 300 * letters.length + 3500);
 });
 
-// reCAPTCHA for phone auth
-if (typeof setupRecaptcha === "function") {
-  setupRecaptcha();
-}
-
 // FILTERING ENGINE
 async function loadJobs() {
   const res = await fetch("{{ '/jobs.json' | relative_url }}");
@@ -132,22 +127,41 @@ if (registerEmailButton) registerEmailButton.addEventListener("click", () => {
 
 const loginGoogleButton = document.getElementById("login-google");
 if (loginGoogleButton) loginGoogleButton.addEventListener("click", () => {
+  setAuthMessage("Opening Google sign-in...", false);
   loginGoogle().then(() => {
-    console.log("Logged in with Google");
-  }).catch(console.error);
+    setAuthMessage("You are now logged in.", false);
+  }).catch((error) => setAuthMessage(error.message, true));
 });
 
 const loginGithubButton = document.getElementById("login-github");
 if (loginGithubButton) loginGithubButton.addEventListener("click", () => {
+  setAuthMessage("Opening GitHub sign-in...", false);
   loginGitHub().then(() => {
-    console.log("Logged in with GitHub");
-  }).catch(console.error);
+    setAuthMessage("You are now logged in.", false);
+  }).catch((error) => setAuthMessage(error.message, true));
 });
 
 const loginPhoneButton = document.getElementById("login-phone");
 if (loginPhoneButton) loginPhoneButton.addEventListener("click", () => {
   const number = prompt("Enter phone number (+44...)");
-  loginPhone(number).then(() => {
-    console.log("Logged in with phone");
-  }).catch(console.error);
+  if (!number) return;
+  setAuthMessage("Complete the reCAPTCHA to receive your code.", false);
+  loginPhone(number)
+    .then((confirmationResult) => {
+      const code = prompt("Enter the SMS code you received:");
+      if (!code) return;
+      return confirmationResult.confirm(code);
+    })
+    .then(() => setAuthMessage("You are now logged in.", false))
+    .catch((error) => {
+      resetRecaptcha();
+      setAuthMessage(error.message, true);
+    });
 });
+
+function setAuthMessage(message, isError) {
+  const element = document.getElementById("auth-message");
+  if (!element) return;
+  element.textContent = message;
+  element.classList.toggle("auth-error", isError);
+}

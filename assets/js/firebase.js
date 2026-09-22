@@ -59,25 +59,32 @@ function loginGitHub() {
 
 let recaptchaVerifier;
 
-// Call this BEFORE loginPhone()
 function setupRecaptcha() {
+  const container = document.getElementById("recaptcha-container");
+  if (!container) {
+    return Promise.reject(new Error("Phone login is unavailable on this page."));
+  }
+  if (recaptchaVerifier) {
+    return Promise.resolve(recaptchaVerifier);
+  }
+
   recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-    size: 'normal',
-    callback: function(response) {
-      console.log("reCAPTCHA solved");
-    }
+    size: 'normal'
   });
+  return recaptchaVerifier.render().then(() => recaptchaVerifier);
+}
+
+function resetRecaptcha() {
+  if (recaptchaVerifier) {
+    recaptchaVerifier.clear();
+    recaptchaVerifier = null;
+  }
 }
 
 function loginPhone(phoneNumber) {
-  const phoneProvider = new firebase.auth.PhoneAuthProvider();
-
-  return phoneProvider.verifyPhoneNumber(phoneNumber, recaptchaVerifier)
-    .then(verificationId => {
-      const code = prompt("Enter the SMS code you received:");
-      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);
-      return auth.signInWithCredential(credential);
-    });
+  return setupRecaptcha().then((verifier) =>
+    auth.signInWithPhoneNumber(phoneNumber, verifier)
+  );
 }
 
 

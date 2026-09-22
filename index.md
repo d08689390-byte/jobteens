@@ -34,9 +34,11 @@ title: JobTeens
   <a class="button-link" href="{{ '/login.html' | relative_url }}">Login with Email</a>
   <a class="button-link" href="{{ '/signup.html' | relative_url }}">Sign up with Email</a>
 </p>
+<div id="recaptcha-container"></div>
 <button id="login-phone">Login with Phone</button>
 <button id="login-google">Login with Google</button>
 <button id="login-github">Login with GitHub</button>
+<p id="auth-message" role="status" aria-live="polite"></p>
 
 <h2>Filter Jobs</h2>
 
