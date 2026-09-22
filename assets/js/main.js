@@ -1,23 +1,40 @@
-// STARTUP ANIMATION
 window.addEventListener("load", () => {
-  const screen = document.getElementById("startup-screen");
-  const logo = document.getElementById("jobteens-logo");
   const sound = document.getElementById("gba-sound");
+  const letters = [
+    "l-J", "l-O", "l-B", "l-T",
+    "l-E1", "l-E2", "l-N", "l-S"
+  ];
 
-  if (sound) sound.play().catch(() => {});
+  // Play GBA sound
+  sound.play().catch(() => {});
 
+  // Animate letters one-by-one
+  letters.forEach((id, index) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.style.opacity = "1";
+      el.style.transform = "scale(1) translate(0, 0)";
+    }, 300 * index);
+  });
+
+  // Show tagline after letters finish
   setTimeout(() => {
-    logo.style.opacity = "1";
-    logo.style.transform = "translateY(-40px)";
-  }, 800);
+    document.getElementById("intro-tagline").style.opacity = "1";
+  }, 300 * letters.length + 400);
 
+  // Fade out intro screen
   setTimeout(() => {
-    logo.style.transform = "translateY(120px)";
-  }, 1600);
+    document.getElementById("intro-screen").style.opacity = "0";
+    document.getElementById("intro-screen").style.transition = "opacity 1s ease";
+  }, 300 * letters.length + 2000);
 
+  // Reveal website
   setTimeout(() => {
-    screen.style.display = "none";
-  }, 2600);
+    document.getElementById("intro-screen").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+  }, 300 * letters.length + 3000);
+});
+
 
   // reCAPTCHA for phone auth
   if (typeof setupRecaptcha === "function") {
