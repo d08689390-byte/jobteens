@@ -1,43 +1,44 @@
----
----
+import { 
+  getAuth, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup 
+} from "firebase/auth";
 
-function showAuthMessage(element, message, isError) {
-  element.textContent = message;
-  element.classList.toggle("auth-error", isError);
-}
+import { 
+  getFirestore, 
+  doc, 
+  setDoc 
+} from "firebase/firestore";
 
-const loginForm = document.getElementById("login-form");
-if (loginForm) {
-  loginForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const message = document.getElementById("login-message");
-    const email = document.getElementById("login-email-input").value.trim();
-    const password = document.getElementById("login-password").value;
+const auth = getAuth();
+const db = getFirestore();
 
-    showAuthMessage(message, "Signing in...", false);
-    loginEmail(email, password)
-      .then(() => {
-        showAuthMessage(message, "You are now logged in.", false);
-        window.location.href = "{{ '/' | relative_url }}";
-      })
-      .catch((error) => showAuthMessage(message, error.message, true));
+// LOGIN
+document.getElementById("login-email")?.addEventListener("click", () => {
+  const email = prompt("Email:");
+  const pass = prompt("Password:");
+  signInWithEmailAndPassword(auth, email, pass);
+});
+
+document.getElementById("login-google")?.addEventListener("click", () => {
+  signInWithPopup(auth, new GoogleAuthProvider());
+});
+
+// REGISTER
+document.getElementById("register-btn")?.addEventListener("click", async () => {
+  const email = document.getElementById("reg-email").value;
+  const pass = document.getElementById("reg-pass").value;
+  const age = document.getElementById("reg-age").value;
+
+  const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+
+  await setDoc(doc(db, "users", userCred.user.uid), {
+    email,
+    age,
+    cv: null
   });
-}
 
-const signupForm = document.getElementById("signup-form");
-if (signupForm) {
-  signupForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const message = document.getElementById("signup-message");
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
-
-    showAuthMessage(message, "Creating your account...", false);
-    registerEmail(email, password)
-      .then(() => {
-        showAuthMessage(message, "Your account was created.", false);
-        window.location.href = "{{ '/' | relative_url }}";
-      })
-      .catch((error) => showAuthMessage(message, error.message, true));
-  });
-}
+  alert("Account created!");
+});

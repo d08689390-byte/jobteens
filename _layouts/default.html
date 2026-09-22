@@ -10,10 +10,11 @@
     <a href="{{ '/' | relative_url }}" id="logo-link">
       <img src="{{ '/assets/img/jobteens-logo.png' | relative_url }}" alt="JobTeens Logo" id="jobteens-logo">
     </a>
-    <nav aria-label="Account navigation">
-      <a href="{{ '/account.html' | relative_url }}">Account</a>
-      <a href="{{ '/messages.html' | relative_url }}">Messages</a>
-    </nav>
+
+    <a href="/messages.html" id="messages-link">
+  Messages <span id="badge"></span>
+</a>
+
   </header>
 
   {{ content }}

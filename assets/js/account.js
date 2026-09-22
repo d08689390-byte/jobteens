@@ -1,24 +1,33 @@
-function redirectToLogin() {
-  window.location.href = "{{ '/login.html' | relative_url }}";
-}
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
-const accountMessage = document.getElementById("account-message");
-const accountDetails = document.getElementById("account-details");
-if (accountMessage && accountDetails) {
-  auth.onAuthStateChanged((user) => {
-    if (!user) {
-      redirectToLogin();
-      return;
-    }
+const auth = getAuth();
+const db = getFirestore();
 
-    document.getElementById("account-email").textContent = user.email || "Not available";
-    accountMessage.textContent = "You are signed in.";
-    accountDetails.hidden = false;
+auth.onAuthStateChanged(async (user) => {
+  if (!user) return location.href = "/login.html";
+
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  const data = userDoc.data();
+
+  document.getElementById("user-info").innerHTML = `
+    <p>Email: ${data.email}</p>
+    <p>Age: ${data.age}</p>
+  `;
+
+  document.getElementById("cv-link").innerHTML = data.cv 
+    ? `<a href="${data.cv}" target="_blank">View CV</a>`
+    : `<a href="/upload-cv.html">Upload CV</a>`;
+
+  const apps = await getDocs(query(
+    collection(db, "applications"),
+    where("user", "==", user.uid)
+  ));
+
+  let html = "";
+  apps.forEach(app => {
+    html += `<p>${app.data().jobTitle}</p>`;
   });
 
-  document.getElementById("logout-button").addEventListener("click", () => {
-    auth.signOut().then(redirectToLogin).catch((error) => {
-      accountMessage.textContent = error.message;
-    });
-  });
-}
+  document.getElementById("applied-jobs").innerHTML = html;
+});
