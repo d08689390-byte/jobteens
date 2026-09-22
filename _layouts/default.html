@@ -10,6 +10,10 @@
     <a href="{{ '/' | relative_url }}" id="logo-link">
       <img src="{{ '/assets/img/jobteens-logo.png' | relative_url }}" alt="JobTeens Logo" id="jobteens-logo">
     </a>
+    <nav aria-label="Account navigation">
+      <a href="{{ '/account.html' | relative_url }}">Account</a>
+      <a href="{{ '/messages.html' | relative_url }}">Messages</a>
+    </nav>
   </header>
 
   {{ content }}
@@ -18,6 +22,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="{{ '/assets/js/firebase.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/auth.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/account.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/messages.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

@@ -25,8 +25,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 24px;
   padding: 20px 0;
   background: #ffffff;
+}
+
+#site-header nav {
+  display: flex;
+  gap: 12px;
+}
+
+#site-header nav a {
+  color: #0078ff;
 }
 
 #jobteens-logo {
@@ -186,6 +196,12 @@ button:hover {
 
 .auth-page {
   max-width: 420px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.page-content {
+  max-width: 720px;
   margin: 30px auto;
   padding: 20px;
 }
