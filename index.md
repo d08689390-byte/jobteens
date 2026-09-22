@@ -24,6 +24,14 @@ title: JobTeens
 </div>
 
 <div id="site-content">
+<a class="profile-link" href="{{ '/account.html' | relative_url }}" aria-label="Open your account">
+  <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="8" r="4"></circle>
+    <path d="M4 21c.7-4 3.4-6 8-6s7.3 2 8 6"></path>
+  </svg>
+  <span>My account</span>
+</a>
+
 <h1>JobTeens</h1>
 
 <p>Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).</p>

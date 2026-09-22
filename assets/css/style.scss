@@ -44,6 +44,29 @@ body {
   image-rendering: pixelated;
 }
 
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0078ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+.profile-icon {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
 /* ---------------------------------------------------------
    FULLSCREEN INTRO SCREEN
 --------------------------------------------------------- */
