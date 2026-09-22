@@ -18,18 +18,17 @@ const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("message-input");
 const sendBtn = document.getElementById("send-message");
 
-// live messages
-onSnapshot(
-  collection(doc(db, "conversations", conversationId), "messages"),
-  (snap) => {
-    let html = "";
-    snap.forEach(m => {
-      const data = m.data();
-      html += `<p><strong>${data.senderName}:</strong> ${data.text}</p>`;
-    });
-    messagesDiv.innerHTML = html;
-  }
-);
+onSnapshot(messagesRef, (snap) => {
+  snap.forEach(async (m) => {
+    const data = m.data();
+    if (!data.readBy.includes(user.uid)) {
+      await updateDoc(doc(messagesRef, m.id), {
+        readBy: [...data.readBy, user.uid]
+      });
+    }
+  });
+});
+
 
 sendBtn.addEventListener("click", async () => {
   const user = auth.currentUser;
