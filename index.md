@@ -7,7 +7,7 @@ title: JobTeens
 <div id="intro-screen">
 <div id="white-flash"></div>
 
-  <audio id="gba-sound" src="/assets/audio/gba-startup.mp3"></audio>
+  <audio id="gba-sound" src="{{ '/assets/audio/gba-startup.mp3' | relative_url }}"></audio>
 
   <div id="letters-container">
     <span class="intro-letter" id="l-J">J</span>
@@ -21,7 +21,9 @@ title: JobTeens
   </div>
 
   <div id="intro-tagline">Youth-powered jobs for The Youth</div>
+</div>
 
+<div id="site-content">
 # JobTeens
 
 Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).
@@ -60,5 +62,4 @@ Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 fo
 <div id="jobs-list"></div>
 
 More features will be added as development continues.
-
-
+</div>
