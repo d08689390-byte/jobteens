@@ -8,7 +8,7 @@ window.addEventListener("load", () => {
   // Play GBA sound
   sound.play().catch(() => {});
 
-  // Animate letters one-by-one
+  // Animate letters one-by-one from corner
   letters.forEach((id, index) => {
     setTimeout(() => {
       const el = document.getElementById(id);
@@ -17,23 +17,37 @@ window.addEventListener("load", () => {
     }, 300 * index);
   });
 
-  // Show tagline after letters finish
+  // SLAM EFFECT (after all letters appear)
+  setTimeout(() => {
+    letters.forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.add("slam");
+    });
+  }, 300 * letters.length + 200);
+
+  // RAINBOW PIXEL MORPH
+  setTimeout(() => {
+    document.getElementById("letters-container").classList.add("rainbow");
+  }, 300 * letters.length + 600);
+
+  // TAGLINE FADE-IN
   setTimeout(() => {
     document.getElementById("intro-tagline").style.opacity = "1";
-  }, 300 * letters.length + 400);
+  }, 300 * letters.length + 1200);
 
-  // Fade out intro screen
+  // FADE OUT INTRO
   setTimeout(() => {
     document.getElementById("intro-screen").style.opacity = "0";
     document.getElementById("intro-screen").style.transition = "opacity 1s ease";
-  }, 300 * letters.length + 2000);
+  }, 300 * letters.length + 2500);
 
-  // Reveal website
+  // SHOW WEBSITE
   setTimeout(() => {
     document.getElementById("intro-screen").style.display = "none";
     document.getElementById("site-content").style.display = "block";
-  }, 300 * letters.length + 3000);
+  }, 300 * letters.length + 3500);
 });
+
 
 
   // reCAPTCHA for phone auth
