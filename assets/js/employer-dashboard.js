@@ -63,6 +63,14 @@ auth.onAuthStateChanged(async (user) => {
   document.getElementById("employer-applications").innerHTML = appsHtml;
 });
 
+window.updateStatus = async (appId, newStatus) => {
+  await updateDoc(doc(db, "applications", appId), {
+    status: newStatus
+  });
+  location.reload();
+};
+
+
 // create/open conversation
 window.openConversation = async (applicationId, teenId, jobId) => {
   const user = auth.currentUser;
