@@ -33,12 +33,21 @@ auth.onAuthStateChanged(async (user) => {
   });
   document.getElementById("employer-jobs").innerHTML = jobsHtml;
 
-  // applications to these jobs
-  const appsQ = query(
-    collection(db, "applications"),
-    where("employerId", "==", user.uid)
-  );
-  const appsSnap = await getDocs(appsQ);
+  appsHtml += `
+  <div>
+    <p>Job: ${data.jobTitle}</p>
+    <p>Teen: ${data.teenEmail}</p>
+    <p>Status: ${data.status}</p>
+
+    <button onclick="updateStatus('${app.id}', 'accepted')">Accept</button>
+    <button onclick="updateStatus('${app.id}', 'rejected')">Reject</button>
+
+    <button onclick="openConversation('${app.id}', '${data.teenId}', '${data.jobId}')">
+      Message
+    </button>
+  </div>
+`;
+
 
   let appsHtml = "";
   appsSnap.forEach(app => {
