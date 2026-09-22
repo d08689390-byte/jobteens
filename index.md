@@ -3,10 +3,22 @@ layout: default
 title: JobTeens
 ---
 
-<!-- Startup screen -->
-<div id="startup-screen">
+<!-- FULLSCREEN INTRO -->
+<div id="intro-screen">
   <audio id="gba-sound" src="/assets/audio/gba-startup.mp3"></audio>
-  <img id="jobteens-logo" src="/assets/img/jobteens-logo.svg" alt="JobTeens Logo">
+
+  <div id="letters-container">
+    <span class="intro-letter" id="l-J">J</span>
+    <span class="intro-letter" id="l-O">O</span>
+    <span class="intro-letter" id="l-B">B</span>
+    <span class="intro-letter" id="l-T">T</span>
+    <span class="intro-letter" id="l-E1">E</span>
+    <span class="intro-letter" id="l-E2">E</span>
+    <span class="intro-letter" id="l-N">N</span>
+    <span class="intro-letter" id="l-S">S</span>
+  </div>
+
+  <div id="intro-tagline">Youth-powered jobs for The Youth</div>
 </div>
 
 # JobTeens
