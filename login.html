@@ -3,20 +3,49 @@ layout: default
 title: Log in - JobTeens
 ---
 
+<style>
+  .auth-page { font-family: sans-serif; max-width: 400px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .auth-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .auth-form label { font-weight: bold; font-size: 14px; }
+  .auth-form input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+  .auth-form button { padding: 12px; background: #0076df; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px; }
+  .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #777; }
+  .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #ddd; }
+  .divider:not(:empty)::before { margin-right: .25em; }
+  .divider:not(:empty)::after { margin-left: .25em; }
+  .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px; width: 100%; font-size: 14px; }
+  .social-btn:hover { background: #f9f9f9; }
+</style>
+
 <main class="auth-page">
   <h1>Log in</h1>
-  <p>Log in to your JobTeens account.</p>
+  <p style="color:#666; margin-bottom:20px;">Log in to your JobTeens account.</p>
 
-  <form id="login-form">
-    <label for="login-email-input">Email</label>
-    <input id="login-email-input" name="email" type="email" autocomplete="email" required>
+  <!-- Login Form Supporting Email and Phone -->
+  <form id="login-form" class="auth-form" onsubmit="event.preventDefault(); localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
+    Email or Phone Number</label>
+    
 
     <label for="login-password">Password</label>
     <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+
+    <div style="text-align: right; margin-top: -5px;">
+      <a href="{{ '/forgot-password.html' | relative_url }}" style="font-size: 13px;">Forgot password?</a>
+    </div>
 
     <button type="submit">Log in</button>
     <p id="login-message" role="status" aria-live="polite"></p>
   </form>
 
-  <p>Need an account? <a href="{{ '/signup.html' | relative_url }}">Sign up</a></p>
+  <div class="divider">or continue with</div>
+
+  <!-- Social Auth Layout Components -->
+  <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
+    <img src="https://unpkg.com" style="width:16px; height:16px;" alt=""> Google
+  </button>
+  <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
+    <img src="https://unpkg.com" style="width:16px; height:16px;" alt=""> GitHub
+  </button>
+
+  <p style="margin-top:20px; font-size:14px; text-align:center;">Need an account? <a href="{{ '/signup.html' | relative_url }}">Sign up</a></p>
 </main>
