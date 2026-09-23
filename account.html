@@ -3,11 +3,108 @@ layout: default
 title: Account - JobTeens
 ---
 
-<main class="page-content">
-  <h1>Your account</h1>
+<style>
+  .account-layout { font-family: sans-serif; margin-top: 20px; }
+  .tab-buttons { display: flex; gap: 5px; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+  .tab-btn { padding: 10px 20px; border: none; background: #f0f0f0; cursor: pointer; font-weight: bold; border-radius: 5px 5px 0 0; }
+  .tab-btn.active { background: #0076df; color: white; }
+  .tab-panel { display: none; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 5px 5px; }
+  .tab-panel.active { display: block; }
+  .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+  .form-group input, .form-group textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; max-width: 400px; }
+  .upload-dropzone { border: 2px dashed #0076df; padding: 30px; text-align: center; background: #f4f9ff; border-radius: 6px; cursor: pointer; margin-bottom: 20px; }
+  .doc-list-item { display: flex; justify-content: space-between; background: #f9f9f9; padding: 10px; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px; }
+  .btn-save { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 4px; cursor: pointer; align-self: flex-start; }
+</style>
+
+<main class="page-content account-layout">
+  <h1>Your Account Dashboard</h1>
   <div id="account-message" role="status" aria-live="polite">Checking your sign-in...</div>
-  <section id="account-details" hidden>
-    <p>Email: <strong id="account-email"></strong></p>
-    <button id="logout-button" type="button">Log out</button>
+
+  <section id="account-dashboard" style="display:none;">
+    <!-- Navigation Tabs -->
+    <div class="tab-buttons" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('profile')" role="tab">Profile</button>
+      <button class="tab-btn" onclick="switchTab('documents')" role="tab">Documents & CVs</button>
+      <button class="tab-btn" onclick="switchTab('settings')" role="tab">Settings</button>
+    </div>
+
+    <!-- Tab Panels -->
+    <!-- PROFILE TAB -->
+    <div id="panel-profile" class="tab-panel active" role="tabpanel">
+      <h3>Profile Details</h3>
+      <form onsubmit="event.preventDefault(); alert('Profile Updated!');">
+        <div class="form-group">
+          <label for="prof-name">Full Name</label>
+          <input type="text" id="prof-name" value="Alex Smith">
+        </div>
+        <div class="form-group">
+          <label for="prof-email">Email Address</label>
+          <input type="email" id="prof-email" value="alex@example.com" readonly style="background:#eee;">
+        </div>
+        <div class="form-group">
+          <label for="prof-bio">Short Bio</label>
+          <textarea id="prof-bio" rows="3">Looking for weekend retail roles in London.</textarea>
+        </div>
+        <button type="submit" class="btn-save">Save Profile</button>
+      </form>
+    </div>
+
+    <!-- DOCUMENTS TAB -->
+    <div id="panel-documents" class="tab-panel" role="tabpanel">
+      <h3>Manage Documents</h3>
+      <div class="upload-dropzone" onclick="document.getElementById('file-upload-input').click()">
+        <p style="margin: 0 0 10px; font-weight: bold; color: #0076df;">Click or Drag files here to upload</p>
+        <span style="font-size: 12px; color: #666;">Supports PDF, DOCX (Max 5MB)</span>
+        <input type="file" id="file-upload-input" style="display:none;" onchange="alert('File selected: ' + this.files[0].name)">
+      </div>
+
+      <h4>Your Files</h4>
+      <div id="uploaded-files-list">
+        <div class="doc-list-item">
+          <span>📄 Alex_Smith_CV_2026.pdf</span>
+          <a href="#" style="color:red; font-size:13px;">Delete</a>
+        </div>
+        <div class="doc-list-item">
+          <span>📄 Cover_Letter_Retail.pdf</span>
+          <a href="#" style="color:red; font-size:13px;">Delete</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="panel-settings" class="tab-panel" role="tabpanel">
+      <h3>Preferences & Safety</h3>
+      <div class="form-group">
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+          <input type="checkbox" checked> Receive instant email notifications for new job matches
+        </label>
+      </div>
+      <div class="form-group">
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+          <input type="checkbox"> Make my profile visible to verified employers
+        </label>
+      </div>
+      <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+        <button id="logout-button" type="button" style="padding:10px 15px; background:#ef4444; color:white; border:none; border-radius:4px; cursor:pointer;">Log out</button>
+      </div>
+    </div>
   </section>
 </main>
+
+<script>
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+    
+    event.currentTarget.classList.add('active');
+    document.getElementById('panel-' + tabId).classList.add('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      document.getElementById('account-message').style.display = 'none';
+      document.getElementById('account-dashboard').style.display = 'block';
+    }, 500);
+  });
+</script>
