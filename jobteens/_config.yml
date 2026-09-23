@@ -1,0 +1,12 @@
+title: JobTeens
+description: Teen job board
+baseurl: "/jobteens"
+markdown: kramdown
+
+collections:
+  jobs:
+    output: true
+
+exclude:
+  - Gemfile
+  - Gemfile.lock

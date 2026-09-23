@@ -1,0 +1,22 @@
+---
+layout: default
+title: Sign up - JobTeens
+---
+
+<main class="auth-page">
+  <h1>Sign up</h1>
+  <p>Create your JobTeens account.</p>
+
+  <form id="signup-form">
+    <label for="signup-email">Email</label>
+    <input id="signup-email" name="email" type="email" autocomplete="email" required>
+
+    <label for="signup-password">Password</label>
+    <input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+
+    <button type="submit">Create account</button>
+    <p id="signup-message" role="status" aria-live="polite"></p>
+  </form>
+
+  <p>Already have an account? <a href="{{ '/login.html' | relative_url }}">Log in</a></p>
+</main>

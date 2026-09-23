@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <header id="site-header">
+    <a href="{{ '/' | relative_url }}" id="logo-link">
+      <img src="{{ '/assets/img/jobteens-logo.png' | relative_url }}" alt="JobTeens Logo" id="jobteens-logo">
+    </a>
+
+    <a href="/messages.html" id="messages-link">
+  Messages <span id="badge"></span>
+</a>
+
+  </header>
+
+  {{ content }}
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="{{ '/assets/js/firebase.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/auth.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/account.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/messages.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>
