@@ -46,6 +46,7 @@ title: JobTeens
       <a href="{{ '/account.html' | relative_url }}">⚙️ Settings</a>
       <a href="{{ '/account.html' | relative_url }}">👤 Profile</a>
       <a href="{{ '/account.html' | relative_url }}">📁 Documents</a>
+      <a href="{{ '/messages.html' | relative_url }}">✉️ Messages</a>
       <a href="#" onclick="localStorage.setItem('loggedIn', 'false'); window.location.reload();" style="color: red;">🚪 Log Out</a>
     </div>
   </div>
