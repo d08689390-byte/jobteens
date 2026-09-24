@@ -79,6 +79,23 @@ title: JobTeens
   More features will be added as development continues.
 </div>
 
+<section class="employers">
+    <h2>Are you an employer?</h2>
+
+    <p>
+        Find talented local students and young people for
+        part-time, weekend and seasonal work.
+    </p>
+
+    /employers/signup.html
+        Employer Sign Up
+    </a>
+
+    /employers/login.html
+        Employer Login
+    </a>
+</section>
+
 <script>
   // Simple check logic simulating session parameters
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
