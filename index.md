@@ -88,19 +88,10 @@ title: JobTeens
     weekend and seasonal work.
   </p>
 
-  <div class="employer-buttons">
-    <a>
-    /employers/signup.html
-      Employer Sign Up
-    </a>
-
-<a>
-/employers/login.html
-      Employer Login
-    </a>
-  </div>
-</section>
-
+   <div class="nav-dropdown-menu" id="employer-dropdown">
+      <a href="{{ 'employers/signup.html' | relative_url }}">Sign Up</a>
+      <a href="{{ 'employers/login.html' | relative_url }}">Log In</a>
+    </div>
 <script>
   // Simple check logic simulating session parameters
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
