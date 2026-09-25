@@ -2,7 +2,15 @@
 layout: default
 title: Post a Job
 ---
-
+<script>
+if (!employer.verified) {
+alert(
+"You must be a verified employer before posting jobs."
+);
+ 
+return;
+}
+  </script>
 <h1>Post a New Job</h1>
 
 <input id="job-title" placeholder="Job Title">
