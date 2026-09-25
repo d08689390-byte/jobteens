@@ -66,6 +66,7 @@ title: JobTeens
       <option value="15">15</option>
       <option value="16">16</option>
       <option value="17">17</option>
+      <option value="18-25(neurodivergent)">18-25</option>
     </select>
 
     <label for="filter-location">Location:</label>
@@ -88,11 +89,13 @@ title: JobTeens
   </p>
 
   <div class="employer-buttons">
+    <a>
     /employers/signup.html
       Employer Sign Up
     </a>
 
-    /employers/login.html
+<a>
+/employers/login.html
       Employer Login
     </a>
   </div>
