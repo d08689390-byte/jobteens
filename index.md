@@ -92,6 +92,9 @@ title: JobTeens
       <a href="{{ 'employers/signup.html' | relative_url }}">Sign Up</a>
       <a href="{{ 'employers/login.html' | relative_url }}">Log In</a>
     </div>
+
+<p>Join our </p><a href="{{ 'https://discord.gg/HVwFU7RkBr' | relative_url }}">Discord Server!</a>
+    
 <script>
   // Simple check logic simulating session parameters
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
