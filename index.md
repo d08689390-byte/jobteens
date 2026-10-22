@@ -94,8 +94,10 @@ title: JobTeens
     </div>
 
 <p>Join our </p><a href="{{ 'https://discord.gg/HVwFU7RkBr' | relative_url }}">Discord Server!</a>
+<p>Call Us for support on either 0116 493 1840 or 07861 927364</p>
     
 <script>
+  src="https://cyberstaff.com/api/widget/public/loader.js" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async>
   // Simple check logic simulating session parameters
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
 
