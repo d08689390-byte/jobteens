@@ -23,27 +23,32 @@ title: Sign up - JobTeens
 
   <form id="signup-form" class="auth-form" onsubmit="event.preventDefault(); localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
     <label for="signup-name">Full Name</label>
-    <input id="signup-name" type="text" placeholder="John Doe" required>
+    <!-- FIXED: Added autocomplete="name" -->
+    <input id="signup-name" type="text" placeholder="John Doe" autocomplete="name" required>
 
     <label for="signup-email">Email Address</label>
-    <input id="signup-email" type="email" placeholder="name@example.com" required>
+    <!-- FIXED: Added autocomplete="email" -->
+    <input id="signup-email" type="email" placeholder="name@example.com" autocomplete="email" required>
 
     <label for="signup-phone">Phone Number</label>
-    <input id="signup-phone" type="tel" placeholder="e.g. +447123456789" required>
+    <!-- FIXED: Added autocomplete="tel" -->
+    <input id="signup-phone" type="tel" placeholder="e.g. +447123456789" autocomplete="tel" required>
 
     <label for="signup-password">Create Password</label>
-    <input id="signup-password" type="password" required>
+    <!-- FIXED: Added autocomplete="new-password" for proper browser password generation mechanics -->
+    <input id="signup-password" type="password" autocomplete="new-password" required>
 
     <button type="submit">Create Account</button>
   </form>
 
   <div class="divider">or sign up with</div>
 
+  <!-- FIXED: Replaced unpkg root domains with direct favicon asset URLs for visual branding icons -->
   <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://unpkg.com" style="width:16px; height:16px;" alt=""> Google
+    <img src="https://google.com" style="width:16px; height:16px;" alt="Google logo"> Google
   </button>
   <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://unpkg.com" style="width:16px; height:16px;" alt=""> GitHub
+    <img src="https://github.com" style="width:16px; height:16px;" alt="GitHub logo"> GitHub
   </button>
 
   <p style="margin-top:20px; font-size:14px; text-align:center;">Already have an account? <a href="{{ '/login.html' | relative_url }}">Log in</a></p>
