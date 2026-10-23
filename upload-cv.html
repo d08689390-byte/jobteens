@@ -1,0 +1,152 @@
+---
+layout: default
+title: Upload CV
+---
+
+<style>
+  .upload-card { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: #ffffff; }
+  .upload-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+  .file-label { font-weight: bold; font-size: 15px; color: #333; }
+  
+  /* Custom File Dropzone UI */
+  .file-dropzone { border: 2px dashed #0076df; padding: 25px; border-radius: 6px; text-align: center; background: #f0f7ff; cursor: pointer; display: block; transition: background 0.2s ease; }
+  .file-dropzone:hover { background: #e0f2fe; }
+  .file-dropzone input[type="file"] { display: none; }
+  .file-dropzone-text { font-size: 14px; color: #4b5563; }
+  .file-name-display { margin-top: 8px; font-weight: bold; color: #0076df; font-size: 13px; word-break: break-all; }
+
+  .submit-upload-btn { padding: 12px; background: #0076df; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px; width: 100%; transition: background 0.2s ease; }
+  .submit-upload-btn:hover { background: #005bb5; }
+  .submit-upload-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+  .status-box { padding: 12px; border-radius: 6px; font-size: 14px; margin-top: 15px; display: none; text-align: center; font-weight: 500; }
+  .status-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .status-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+</style>
+
+<main class="upload-card">
+  <h1>Upload Your CV</h1>
+  <p style="color:#666; font-size:14px; margin-bottom:25px;">Please upload your curriculum vitae. Accepted formats: PDF or Word docs (Max 5MB).</p>
+
+  <form id="cv-upload-form">
+    <div class="upload-group">
+      <label class="file-label" id="file-input-label">Select Document File</label>
+      
+      <label for="cv-file" class="file-dropzone" aria-labelledby="file-input-label">
+        <div class="file-dropzone-text">
+          <span>📁</span> <strong>Click to choose a file</strong> or drag it here
+        </div>
+        <div id="file-name" class="file-name-display">No file chosen</div>
+        <input type="file" id="cv-file" name="cv_document" accept=".pdf,.doc,.docx" required aria-required="true">
+      </label>
+    </div>
+
+    <button type="submit" id="upload-cv-btn" class="submit-upload-btn">Upload CV</button>
+  </form>
+
+  <div id="cv-status" class="status-box" role="status" aria-live="polite"></div>
+</main>
+
+<!-- FIXED: Loading Firebase Services via standard browser compatible CDN imports -->
+<script type="module">
+  // NOTE: If your project already initializes Firebase globally elsewhere, remove these top 4 module imports
+  import { initializeApp } from "https://gstatic.com";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://gstatic.com";
+  import { getAuth, onAuthStateChanged } from "https://gstatic.com";
+  import { getFirestore, doc, updateDoc } from "https://gstatic.com";
+  // TODO: Replace this placeholder object config block with your actual Firebase Console settings!
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "https://jobteens.firebaseapp.com",
+    projectId: "jobteens",
+    storageBucket: "jobteens.firebasestorage.app",
+    messagingSenderId: "205272038289",
+    appId: "1:205272038289:web:b92e318944db72f39cb830"
+  };
+
+  // Initialize Services
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('cv-file');
+    const fileNameDisplay = document.getElementById('file-name');
+    const uploadForm = document.getElementById('cv-upload-form');
+    const statusBox = document.getElementById('cv-status');
+    const submitBtn = document.getElementById('upload-cv-btn');
+
+    // UI Feedback: Sync file picking text
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        
+        // Validation check: Prevent file sizes over 5MB
+        if (file.size > 5 * 1024 * 1024) {
+          showStatus('File is too large! Maximum limit is 5MB.', 'error');
+          fileInput.value = '';
+          fileNameDisplay.innerText = 'No file chosen';
+          return;
+        }
+        fileNameDisplay.innerText = file.name;
+        statusBox.style.display = 'none';
+      } else {
+        fileNameDisplay.innerText = 'No file chosen';
+      }
+    });
+
+    // FIXED: Switched "click" to "submit" event listener to preserve html validation pipeline
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const file = fileInput.files[0];
+      if (!file) return showStatus('Select a file first!', 'error');
+
+      // FIXED: Added defensive guard clause to check user verification state
+      const user = auth.currentUser;
+      if (!user) {
+        return showStatus('Authentication error: You must be logged in to upload assets.', 'error');
+      }
+
+      // Visual Loading States UI transition
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Uploading to Cloud...';
+      showStatus('Uploading document sequence securely...', 'success');
+
+      try {
+        // Dynamically parse file extension to keep file format correct in storage bucket
+        const fileExt = file.name.split('.').pop();
+        const cvRef = ref(storage, `cv_uploads/${user.uid}.${fileExt}`);
+
+        // Upload to Storage Bucket
+        await uploadBytes(cvRef, file);
+        
+        // Grab secure direct download URL
+        const url = await getDownloadURL(cvRef);
+
+        // Update User Doc profile pointer link references
+        await updateDoc(doc(db, "users", user.uid), { cv: url });
+
+        showStatus('🎉 CV uploaded successfully! Your profile has been updated.', 'success');
+        
+        // Reset elements
+        uploadForm.reset();
+        fileNameDisplay.innerText = 'No file chosen';
+      } catch (error) {
+        console.error("Firebase CV Upload Error:", error);
+        showStatus(`Upload failed: ${error.message}`, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Upload CV';
+      }
+    });
+
+    function showStatus(text, type) {
+      statusBox.innerText = text;
+      statusBox.className = 'status-box';
+      statusBox.classList.add(type === 'success' ? 'status-success' : 'status-error');
+      statusBox.style.display = 'block';
+    }
+  });
+</script>
