@@ -22,26 +22,22 @@ title: Messages - JobTeens
   <div class="messages-container" id="conversations-wrapper" style="display: none;">
     <!-- Conversation Sidebar -->
     <aside class="threads-sidebar">
-      <section id="conversation-list">
-        <div class="thread-item">
-          <strong>Sainsbury's Recruitment</strong>
-          <p style="margin:4px 0 0; font-size:13px; color:#666;">Regarding your application...</p>
-        </div>
-        <div class="thread-item">
-          <strong>JobTeens Support</strong>
-          <p style="margin:4px 0 0; font-size:13px; color:#666;">Welcome to the platform!</p>
-        </div>
-      </section>
+      <!-- FIXED: Cleaned and left empty to dynamically append threads via JS -->
+      <nav id="conversation-list" aria-label="Message threads">
+        
+      </nav>
     </aside>
 
     <!-- Chat Area -->
-    <section class="chat-view">
-      <div class="chat-history">
-        <p style="color:#777; text-align:center;">Select a conversation to read your messages.</p>
+    <section class="chat-view" aria-label="Active conversation">
+      <!-- FIXED: Default placeholders removed -->
+      <div class="chat-history" id="chat-history-window">
+        
       </div>
       <div class="chat-input-row">
-        <input type="text" placeholder="Type a message..." disabled>
-        <button type="button" disabled>Send</button>
+        <!-- FIXED: Removed "disabled" attributes to allow input once ready -->
+        <input type="text" id="chat-message-input" placeholder="Type a message...">
+        <button type="button" id="chat-send-btn">Send</button>
       </div>
     </section>
   </div>
