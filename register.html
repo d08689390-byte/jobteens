@@ -1,0 +1,163 @@
+---
+layout: default
+title: Register
+---
+
+<style>
+  .auth-page { font-family: sans-serif; max-width: 400px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); background: #ffffff; }
+  .auth-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .auth-form label { font-weight: bold; font-size: 14px; color: #333; }
+  .auth-form input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+  .auth-form button { padding: 12px; background: #0076df; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px; transition: background 0.2s; }
+  .auth-form button:hover { background: #005bb5; }
+  .auth-form button:disabled { background: #9ca3af; cursor: not-allowed; }
+  
+  .status-box { padding: 12px; border-radius: 6px; font-size: 14px; margin-top: 15px; display: none; text-align: center; font-weight: 500; }
+  .status-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .status-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+</style>
+
+<main class="auth-page">
+  <h1>Create Your JobTeens Account</h1>
+  <p style="color:#666; margin-bottom:20px; font-size:14px;">Sign up to find youth-powered local jobs.</p>
+
+  <!-- FIXED: Form structure wrapped with accessible labels and autocomplete hints -->
+  <form id="register-form" class="auth-form">
+    <label for="reg-email">Email Address</label>
+    <input id="reg-email" type="email" placeholder="name@example.com" autocomplete="email" required>
+
+    <label for="reg-pass">Password</label>
+    <input id="reg-pass" type="password" placeholder="At least 6 characters" autocomplete="new-password" required>
+
+    <label for="reg-age">Your Age</label>
+    <input id="reg-age" type="number" placeholder="e.g. 16" min="13" max="100" required>
+
+    <button type="submit" id="register-btn">Register</button>
+  </form>
+
+  <!-- FIXED: Standardized text feedback elements for error logs -->
+  <div id="auth-status" class="status-box" role="status" aria-live="polite"></div>
+</main>
+
+<!-- FIXED: Loaded Firebase via ESM browser-native CDN paths -->
+<script type="module">
+  // NOTE: If you initialize app settings globally in another layer, remove the base initialization line below
+  import { initializeApp } from "https://gstatic.com";
+  import { 
+    getAuth, 
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup 
+  } from "https://gstatic.com";
+  import { 
+    getFirestore, 
+    doc, 
+    setDoc 
+  } from "https://gstatic.com";
+
+  // TODO: Insert your actual Firebase project configuration settings block here
+ const firebaseConfig = {
+  apiKey: "AIzaSyAvCFQ9_zf7WMR9OTqo0SP8Dc9eey5m3G8",
+  authDomain: "jobteens.firebaseapp.com",
+  projectId: "jobteens",
+  storageBucket: "jobteens.firebasestorage.app",
+  messagingSenderId: "205272038289",
+  appId: "1:205272038289:web:b92e318944db72f39cb830",
+  measurementId: "G-VDP94DYCKG"
+};
+
+  // Initialize Services
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const registerForm = document.getElementById('register-form');
+    const statusBox = document.getElementById('auth-status');
+    const registerBtn = document.getElementById('register-btn');
+
+    // OPTIONAL: Keep hooks for your contextual legacy layout prompts safely isolated
+    document.getElementById("login-email")?.addEventListener("click", () => {
+      const email = prompt("Email:");
+      const pass = prompt("Password:");
+      if (email && pass) {
+        signInWithEmailAndPassword(auth, email, pass)
+          .then(() => alert("Logged In!"))
+          .catch(err => alert(err.message));
+      }
+    });
+
+    document.getElementById("login-google")?.addEventListener("click", () => {
+      signInWithPopup(auth, new GoogleAuthProvider())
+        .then(() => alert("Logged In via Google!"))
+        .catch(err => alert(err.message));
+    });
+
+    // REGISTER HANDLER
+    // FIXED: Switched "click" event to "submit" to prevent bypass vulnerabilities
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById("reg-email").value;
+      const pass = document.getElementById("reg-pass").value;
+      const age = parseInt(document.getElementById("reg-age").value, 10);
+
+      // Simple Guard: Enforce programmatic age restrictions for JobTeens criteria
+      if (age < 13) {
+        showStatus("Registration Error: You must be at least 13 years old to use JobTeens.", "error");
+        return;
+      }
+
+      // Enter visual processing state
+      registerBtn.disabled = true;
+      registerBtn.innerText = "Creating Account...";
+      statusBox.style.display = 'none';
+
+      try {
+        // 1. Create account authentication node 
+        const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        // 2. Initialize Firestore profile record metadata entries
+        await setDoc(doc(db, "users", userCred.user.uid), {
+          email: email,
+          age: age,
+          cv: null,
+          createdAt: new Date().toISOString()
+        });
+
+        showStatus("🎉 Account created successfully! Redirecting...", "success");
+        
+        // Wait briefly so the user sees the success message before changing pages
+        setTimeout(() => {
+          localStorage.setItem('loggedIn', 'true');
+          window.location.href = "./";
+        }, 1500);
+
+      } catch (error) {
+        console.error("Registration Failure:", error);
+        
+        // Human-friendly translations for common Firebase Auth issues
+        let friendlyMessage = error.message;
+        if (error.code === 'auth/email-already-in-use') {
+          friendlyMessage = "This email address is already linked to an existing account.";
+        } else if (error.code === 'auth/weak-password') {
+          friendlyMessage = "Your password is too weak. Please use at least 6 characters.";
+        } else if (error.code === 'auth/invalid-email') {
+          friendlyMessage = "Please enter a valid email address style rule.";
+        }
+        
+        showStatus(`Error: ${friendlyMessage}`, "error");
+        registerBtn.disabled = false;
+        registerBtn.innerText = "Register";
+      }
+    });
+
+    function showStatus(text, type) {
+      statusBox.innerText = text;
+      statusBox.className = 'status-box';
+      statusBox.classList.add(type === 'success' ? 'status-success' : 'status-error');
+      statusBox.style.display = 'block';
+    }
+  });
+</script>
