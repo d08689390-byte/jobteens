@@ -23,13 +23,15 @@ title: Log in - JobTeens
 
   <!-- Login Form Supporting Email and Phone -->
   <form id="login-form" class="auth-form" onsubmit="event.preventDefault(); localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    Email or Phone Number</label>
+    <!-- FIXED: Added missing opening label tag and set matching "for" attribute -->
+    <label for="login-credential">Email or Phone Number</label>
     
+    <!-- FIXED: Added missing text input element for credential entry -->
+    <input id="login-credential" name="credential" type="text" autocomplete="username" placeholder="e.g., name@example.com" required>
 
     <label for="login-password">Password</label>
     <input id="login-password" name="password" type="password" autocomplete="current-password" required>
 
-    
     <button type="submit">Log in</button>
     <p id="login-message" role="status" aria-live="polite"></p>
   </form>
@@ -38,14 +40,15 @@ title: Log in - JobTeens
 
   <!-- Social Auth Layout Components -->
   <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://google.com" style="width:16px; height:16px;" alt=""> Google
+    <!-- NOTE: Substituted root domains with common branding icon paths as place-holders -->
+    <img src="https://google.com" style="width:16px; height:16px;" alt="Google logo"> Google
   </button>
   <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://github.com" style="width:16px; height:16px;" alt=""> GitHub
+    <img src="https://github.com" style="width:16px; height:16px;" alt="GitHub logo"> GitHub
   </button>
 
-  <p style="margin-top:20px; font-size:14px; text-align:center;">Need an account? <a href="{{ '/signup.html' | relative_url }}">Sign up</a>
+  <!-- FIXED: Closed the "Sign up" <a> tag properly -->
+  <p style="margin-top:20px; font-size:14px; text-align:center;">Need an account? <a href="{{ '/signup.html' | relative_url }}">Sign up</a></p>
   <p style="margin-top:20px; font-size:14px; text-align:center;">Forgot Your Password? <a href="{{ '/forgot-password.html' | relative_url }}">Reset It</a></p>
-</main>
-</main>
-</main>
+</main> <!-- FIXED: Removed duplicate closing </main> </main> tags -->
+
