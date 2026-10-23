@@ -1,0 +1,169 @@
+---
+layout: default
+title: Candidate Dashboard
+---
+
+<style>
+  .dashboard-layout { font-family: sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
+  .dashboard-section { margin-bottom: 40px; }
+  .dashboard-section h2 { font-size: 20px; color: #111827; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; margin-bottom: 16px; }
+  
+  /* Profile Summary Strip */
+  .profile-strip { background: #f8f9fa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+  .profile-meta h3 { margin: 0 0 6px 0; font-size: 18px; color: #111827; }
+  .profile-meta p { margin: 2px 0; font-size: 14px; color: #4b5563; }
+  .cv-link { font-weight: bold; color: #0076df; text-decoration: none; font-size: 14px; }
+  .cv-link:hover { text-decoration: underline; }
+
+  /* Application Card Component Layout */
+  .dashboard-grid { display: flex; flex-direction: column; gap: 12px; }
+  .data-card { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  
+  .card-info p { margin: 4px 0; font-size: 14px; }
+  .card-title { font-weight: bold; color: #111827; font-size: 16px; }
+  .card-subtitle { color: #4b5563; }
+  
+  /* Status Badge Tags Styling */
+  .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
+  .status-pending { background: #fef3c7; color: #d97706; }
+  .status-accepted { background: #d1fae5; color: #065f46; }
+  .status-rejected { background: #fee2e2; color: #991b1b; }
+
+  /* Action Buttons */
+  .chat-link-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #0076df; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+  .chat-link-btn:hover { background: #005bb5; }
+  .chat-link-btn.disabled { background: #e5e7eb; color: #9ca3af; pointer-events: none; cursor: not-allowed; }
+
+  .empty-msg { padding: 30px; text-align: center; color: #6b7280; font-size: 14px; background: #f9fafb; border-radius: 8px; border: 1px dashed #e5e7eb; }
+</style>
+
+<main class="dashboard-layout">
+  <h1>Candidate Dashboard</h1>
+
+  <!-- PROFILE OVERVIEW HUB -->
+  <div class="profile-strip" id="profile-summary">
+    <div class="profile-meta">
+      <h3 id="user-email-display">Loading profile...</h3>
+      <p id="user-age-display">Age: --</p>
+    </div>
+    <div id="user-cv-display">
+      <span style="color: #9ca3af; font-size: 14px;">No CV uploaded</span>
+    </div>
+  </div>
+
+  <!-- CANDIDATE APPLICATIONS SECTION -->
+  <section class="dashboard-section">
+    <h2>Your Sent Applications</h2>
+    <div id="teen-applications" class="dashboard-grid">
+      <div class="empty-msg">🔄 Tracking your submitted applications...</div>
+    </div>
+  </section>
+</main>
+
+<!-- FIREBASE INTEGRATION MODULE -->
+<script type="module">
+  import { initializeApp } from "https://gstatic.com";
+  import { getAuth, onAuthStateChanged } from "https://gstatic.com";
+  import { 
+    getFirestore, 
+    collection, 
+    query, 
+    where, 
+    getDocs, 
+    doc, 
+    getDoc 
+  } from "https://gstatic.com";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAvCFQ9_zf7WMR9OTqo0SP8Dc9eey5m3G8",
+    authDomain: "://firebaseapp.com",
+    projectId: "jobteens",
+    storageBucket: "jobteens.firebasestorage.app",
+    messagingSenderId: "205272038289",
+    appId: "1:205272038289:web:b92e318944db72f39cb830",
+    measurementId: "G-VDP94DYCKG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Helper utility to safely sanitize data values against script injections
+  function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    try {
+      /* 1. FETCH AND DISSECT USER RECORD FOR SUMMARY PANEL */
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        document.getElementById("user-email-display").innerText = escapeHTML(userData.email);
+        document.getElementById("user-age-display").innerText = `Age: ${escapeHTML(userData.age?.toString())}`;
+        
+        if (userData.cv) {
+          document.getElementById("user-cv-display").innerHTML = `
+            <a href="${escapeHTML(userData.cv)}" target="_blank" rel="noopener" class="cv-link">📄 View Uploaded CV</a>
+          `;
+        }
+      } else {
+        document.getElementById("user-email-display").innerText = escapeHTML(user.email);
+      }
+
+      /* 2. QUERY APPLICATIONS SENT BY THIS CANDIDATE */
+      const appsQ = query(collection(db, "applications"), where("teenId", "==", user.uid));
+      const appsSnap = await getDocs(appsQ);
+      const appsContainer = document.getElementById("teen-applications");
+
+      if (appsSnap.empty) {
+        appsContainer.innerHTML = `
+          <div class="empty-msg">
+            <p style="margin: 0 0 10px 0; font-weight: bold;">You haven't applied for any jobs yet!</p>
+            <a href="./" style="color: #0076df; font-size: 13px; text-decoration: none; font-weight: bold;">Browse active jobs →</a>
+          </div>`;
+      } else {
+        let appsHtml = "";
+        appsSnap.forEach(appDoc => {
+          const data = appDoc.data();
+          const status = data.status || 'pending';
+          
+          // Deterministic conversation ID matching your employer setup
+          const convId = `${data.jobId}_${user.uid}_${data.employerId}`;
+          
+          // Only permit messaging if application has been reviewed or processed
+          const allowChat = status === 'accepted' || status === 'pending';
+
+          appsHtml += `
+            <div class="data-card">
+              <div class="card-info">
+                <p class="card-title">${escapeHTML(data.jobTitle)}</p>
+                <p class="card-subtitle">🏢 Employer ID: ${escapeHTML(data.employerId.substring(0, 8))}...</p>
+                <p>Status: <span class="status-badge status-${status}">${escapeHTML(status)}</span></p>
+              </div>
+              <div>
+                <a href="/chat.html?id=${convId}" class="chat-link-btn ${allowChat ? '' : 'disabled'}">
+                  <span>✉️</span> Message Employer
+                </a>
+              </div>
+            </div>`;
+        });
+        appsContainer.innerHTML = appsHtml;
+      }
+
+    } catch (err) {
+      console.error("Candidate Dashboard runtime exception:", err);
+      document.getElementById("teen-applications").innerHTML = `
+        <div class="empty-msg" style="color: #b91c1c;">⚠️ Failed to track application entries: ${escapeHTML(err.message)}</div>
+      `;
+    }
+  });
+</script>
