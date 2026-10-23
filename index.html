@@ -4,6 +4,7 @@ title: JobTeens
 ---
 
 <style>
+  /* Header Styling */
   .header-nav-container { display: flex; justify-content: flex-end; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #e5e7eb; position: relative; }
   .profile-link-btn { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #333; font-weight: 600; cursor: pointer; border: 1px solid #ccc; padding: 6px 12px; border-radius: 20px; background: white; }
   .profile-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
@@ -11,6 +12,24 @@ title: JobTeens
   .nav-dropdown-menu a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }
   .nav-dropdown-menu a:last-child { border-bottom: none; }
   .nav-dropdown-menu a:hover { background: #f3f4f6; }
+
+  /* Added Employer Area Button Wrapper Styling */
+  .employer-actions { display: flex; gap: 10px; margin: 15px 0; }
+  .employer-btn { padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 6px; border: 1px solid #0076df; font-size: 14px; }
+  .employer-btn.primary { background: #0076df; color: white; }
+  .employer-btn.secondary { background: white; color: #0076df; }
+  .employer-btn:hover { opacity: 0.9; }
+
+  /* New Stylish CTA Button System */
+  .cta-buttons-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; font-family: sans-serif; }
+  .action-card-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 15px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.1s ease, box-shadow 0.1s ease; }
+  .action-card-btn:active { transform: scale(0.98); }
+  
+  /* Button Themes */
+  .btn-discord { background: #5865F2; color: white; box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2); }
+  .btn-discord:hover { background: #4752C4; }
+  .btn-phone { background: #10B981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+  .btn-phone:hover { background: #059669; }
 </style>
 
 <!-- FULLSCREEN INTRO -->
@@ -33,7 +52,7 @@ title: JobTeens
 <!-- TOP GLOBAL NAVIGATION SYSTEM -->
 <div class="header-nav-container">
   <div style="position: relative;">
-    <button type="button" class="profile-link-btn" id="dynamic-user-nav" onclick="handleNavClick()">
+    <button type="button" class="profile-link-btn" id="dynamic-user-nav" onclick="handleNavClick(event)">
       <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="8" r="4"></circle>
         <path d="M4 21c.7-4 3.4-6 8-6s7.3 2 8 6"></path>
@@ -77,29 +96,36 @@ title: JobTeens
   <h2>Job Listings</h2>
   <div id="jobs-list"></div>
 
-  More features will be added as development continues.
+  <p>More features will be added as development continues.</p>
 </div>
 
 <section class="employers-section">
   <h2>Are you an employer?</h2>
+  <p>Find talented local students and young people for part-time, weekend and seasonal work.</p>
 
-  <p>
-    Find talented local students and young people for part-time,
-    weekend and seasonal work.
-  </p>
+  <!-- FIXED: Transformed broken hidden employer menu into clear, clickable action buttons -->
+  <div class="employer-actions">
+    <a href="{{ '/employers/signup.html' | relative_url }}" class="employer-btn primary">Employer Sign Up</a>
+    <a href="{{ '/employers/login.html' | relative_url }}" class="employer-btn secondary">Employer Log In</a>
+  </div>
 
-   <div class="nav-dropdown-menu" id="employer-dropdown">
-      <a href="{{ 'employers/signup.html' | relative_url }}">Sign Up</a>
-      <a href="{{ 'employers/login.html' | relative_url }}">Log In</a>
-    </div>
-
-<p>Join our </p><a href="{{ 'https://discord.gg/HVwFU7RkBr' | relative_url }}">Discord Server!</a>
-<p>Call Us for support on either 0116 493 1840 or 07861 927364</p>
+  <!-- FIXED: Embedded beautiful action buttons with click-to-call and correct target properties -->
+  <div class="cta-buttons-group">
+    <a href="https://discord.gg/HVwFU7RkBr" target="_blank" rel="noopener" class="action-card-btn btn-discord">
+      <span>💬</span> Join Our Discord Server
+    </a>
+    <a href="tel:01164931840" class="action-card-btn btn-phone">
+      <span>📞</span> Call Landline (0116 493 1840)
+    </a>
+    <a href="tel:07861927364" class="action-card-btn btn-phone">
+      <span>📱</span> Call Mobile (07861 927364)
+    </a>
+  </div>
+</section>
 
 <script src="https://cyberstaff.com/api/widget/public/loader.js" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
     
 <script>
-  // Simple check logic simulating session parameters
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -111,21 +137,23 @@ title: JobTeens
     }
   });
 
-  function handleNavClick() {
+  // FIXED: Added event parameter to prevent immediate event bubbling trigger collapse
+  function handleNavClick(e) {
+    if (e) e.stopPropagation();
     if (!isLoggedIn) {
-      // Redirect to login page instantly if user is logged out
       window.location.href = "{{ '/login.html' | relative_url }}";
     } else {
-      // Toggle custom settings/profile dropdown block if logged in
       const dropdown = document.getElementById('account-dropdown');
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
   }
 
-  // Close dropdown on click outside
   window.addEventListener('click', function(e) {
-    if (!document.getElementById('dynamic-user-nav').contains(e.target)) {
-      document.getElementById('account-dropdown').style.display = 'none';
+    const navButton = document.getElementById('dynamic-user-nav');
+    // FIXED: Ensured elements exist before parsing containment check properties
+    if (navButton && !navButton.contains(e.target)) {
+      const dropdown = document.getElementById('account-dropdown');
+      if (dropdown) dropdown.style.display = 'none';
     }
   });
 </script>
