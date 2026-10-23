@@ -1,0 +1,148 @@
+---
+layout: default
+title: Post a Job
+---
+
+<style>
+  .post-job-card { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: #ffffff; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .form-group label { font-weight: bold; font-size: 14px; color: #333; }
+  .form-group input, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit; }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  
+  .submit-job-btn { padding: 12px; background: #0076df; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 15px; width: 100%; transition: background 0.2s; }
+  .submit-job-btn:hover { background: #005bb5; }
+  .submit-job-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+  .status-box { padding: 12px; border-radius: 6px; font-size: 14px; margin-top: 15px; display: none; text-align: center; font-weight: 500; }
+  .status-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .status-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+</style>
+
+<main class="post-job-card">
+  <h1>Post a New Job</h1>
+  <p style="color:#666; font-size:14px; margin-bottom:25px;">Fill out the details below to list a new opportunity on JobTeens.</p>
+
+  <!-- FIXED: Wrapped items inside a programmatic semantic Form component -->
+  <form id="post-job-form">
+    <div class="form-group">
+      <label for="job-title">Job Title</label>
+      <input id="job-title" type="text" placeholder="e.g., Weekend Retail Assistant" required>
+    </div>
+
+    <div class="form-group">
+      <label for="job-location">Location</label>
+      <input id="job-location" type="text" placeholder="e.g., Leicester (LE1) or Remote" required>
+    </div>
+
+    <div class="form-group">
+      <label for="job-pay">Pay Rate</label>
+      <input id="job-pay" type="text" placeholder="e.g., £8.50 per hour" required>
+    </div>
+
+    <div class="form-group">
+      <label for="job-desc">Job Description</label>
+      <textarea id="job-desc" placeholder="Describe the responsibilities, working hours, and any ideal criteria..." required></textarea>
+    </div>
+
+    <button type="submit" id="post-job-btn" class="submit-job-btn">Post Job</button>
+  </form>
+
+  <div id="job-status" class="status-box" role="status" aria-live="polite"></div>
+</main>
+
+<!-- FIXED: Loaded functional Firebase distribution channels via native ES Module streams -->
+<script type="module">
+  import { initializeApp } from "https://gstatic.com";
+  import { getAuth, onAuthStateChanged } from "https://gstatic.com";
+  import { getFirestore, collection, addDoc, doc, getDoc } from "https://gstatic.com";
+
+  // TODO: Double-check that this object configuration accurately matches your project settings
+  const firebaseConfig = {
+    apiKey: "AIzaSyAvCFQ9_zf7WMR9OTqo0SP8Dc9eey5m3G8",
+    authDomain: "://firebaseapp.com",
+    projectId: "jobteens",
+    storageBucket: "jobteens.firebasestorage.app",
+    messagingSenderId: "205272038289",
+    appId: "1:205272038289:web:b92e318944db72f39cb830",
+    measurementId: "G-VDP94DYCKG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const jobForm = document.getElementById('post-job-form');
+  const statusBox = document.getElementById('job-status');
+  const postBtn = document.getElementById('post-job-btn');
+
+  // FIXED: Consolidated the inline verification check securely inside an active state listener
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    try {
+      // Fetch employer metadata from Firestore to verify access permission records
+      const employerDoc = await getDoc(doc(db, "employers", user.uid));
+      
+      if (!employerDoc.exists() || !employerDoc.data().verified) {
+        showStatus("⚠️ Access Blocked: You must be a verified employer before posting listings.", "error");
+        postBtn.disabled = true;
+        // Lock inputs to prevent unauthorised composition steps
+        Array.from(jobForm.elements).forEach(el => el.disabled = true);
+      }
+    } catch (error) {
+      console.error("Profile check failure:", error);
+      showStatus("Error verifying employer status layer. Please try reloading.", "error");
+    }
+  });
+
+  // SUBMIT PIPELINE
+  // FIXED: Bound handler directly to the submit pipeline to catch HTML5 client validations
+  jobForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user) return window.location.href = "/login.html";
+
+    const title = document.getElementById("job-title").value;
+    const jobLoc = document.getElementById("job-location").value; // FIXED: Renamed to clear collision conflicts
+    const pay = document.getElementById("job-pay").value;
+    const desc = document.getElementById("job-desc").value;
+
+    postBtn.disabled = true;
+    postBtn.innerText = "Publishing Listing...";
+    statusBox.style.display = 'none';
+
+    try {
+      await addDoc(collection(db, "jobs"), {
+        employerId: user.uid,
+        employerEmail: user.email,
+        title: title,
+        location: jobLoc,
+        pay: pay,
+        desc: desc,
+        createdAt: new Date().toISOString() // FIXED: Serialized string date for predictable cross-platform processing
+      });
+
+      showStatus("🎉 Job opportunity posted successfully!", "success");
+      jobForm.reset();
+
+    } catch (error) {
+      console.error("Firestore Write Rejection Error:", error);
+      showStatus(`Submission Failed: ${error.message}`, "error");
+    } finally {
+      postBtn.disabled = false;
+      postBtn.innerText = "Post Job";
+    }
+  });
+
+  function showStatus(text, type) {
+    statusBox.innerText = text;
+    statusBox.className = 'status-box';
+    statusBox.classList.add(type === 'success' ? 'status-success' : 'status-error');
+    statusBox.style.display = 'block';
+  }
+</script>
