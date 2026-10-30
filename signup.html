@@ -63,6 +63,7 @@ title: Sign up - JobTeens
 <script type="module">
   // NOTE: If you initialize app settings globally in another layer, remove the base initialization line below
   import { initializeApp } from "https://gstatic.com";
+  import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
   import { 
     getAuth, 
     signInWithEmailAndPassword,
@@ -91,6 +92,25 @@ title: Sign up - JobTeens
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+
+async function handleSignUp(email, password) {
+  try {
+    // 1. Authenticate and create user in Firebase
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // 2. Safe-keep the Firebase UID so your ID check page can read it
+    sessionStorage.setItem("pending_verify_uid", user.uid);
+
+    // 3. Move the user over to your verification step
+    window.location.href = 'id-check.html';
+
+  } catch (error) {
+    console.error("Firebase Auth Error:", error.code, error.message);
+    alert(`Registration failed: ${error.message}`);
+  }
+}
+
 
   document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
