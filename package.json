@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.9",
+    "firebase-admin": "^14.5.0",
+    "firebase-functions": "^7.4.0",
+    "mongoose": "^9.11.4",
+    "playwright": "^1.64.1"
+  },
+  "name": "jobteens",
+  "version": "1.0.0",
+  "description": "JobTeens is a teen-friendly job board built with GitHub Pages and Jekyll.   It helps young people aged 13–17 (and up to 25 for neurodivergent applicants) find local or remote part-time work that matches their age, location, and legal working limits.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d08689390-byte/jobteens.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/d08689390-byte/jobteens/issues"
+  },
+  "homepage": "https://github.com/d08689390-byte/jobteens#readme"
+}
