@@ -1,5 +1,5 @@
 import { getAuth } from "https://unpkg.com/firebase@12.19.0";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://unpkg.com/firebase@12.19.0";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/app/package.json";
 
 
 const auth = getAuth();
