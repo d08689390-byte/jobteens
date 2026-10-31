@@ -246,7 +246,7 @@ title: JobTeens
   <link rel="manifest" href="/manifest.json">
   <h1>JobTeens</h1>
   <p>Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).</p>
-  <h2>Filter Jobs</h2>
+ <h2>Filter Jobs</h2>
   <div id="filter-box">
     <label for="filter-age">Age:</label>
     <select id="filter-age">
@@ -262,17 +262,16 @@ title: JobTeens
     <label for="filter-location">Location:</label>
     <input id="filter-location" type="text" placeholder="Postcode or area">
 
-    <!-- ADDED: Minimum Wage Select Input Filter -->
+    <!-- FIXED: Dropdown selection values explicitly map to plain parseable floats -->
     <label for="filter-wage">Min Wage (£):</label>
     <select id="filter-wage">
       <option value="">Any Wage</option>
-      <option value="7.00">£7.00+</option>
-      <option value="8.00">£8.00+</option>
-      <option value="9.00">£9.00+</option>
-      <option value="10.00">£10.00+</option>
+      <option value="7.00">£7.00 or higher</option>
+      <option value="8.00">£8.00 or higher</option>
+      <option value="9.00">£9.00 or higher</option>
+      <option value="10.00">£10.00 or higher</option>
     </select>
 
-    <!-- ADDED: Job Category/Tags Keyword Search Filter -->
     <label for="filter-tag">Keyword/Tag:</label>
     <input id="filter-tag" type="text" placeholder="e.g. Weekend, Retail">
 
@@ -289,6 +288,7 @@ title: JobTeens
     <!-- Populated dynamically via Javascript -->
   </div>
 </div>
+
 <section class="employers-section">
   <h2>Are you an employer?</h2>
   <p>Find talented local students and young people for part-time, weekend and seasonal work.</p>
@@ -302,7 +302,7 @@ title: JobTeens
   </div>
 </section>
 <!-- Link to external dataset script file -->
-<script src="{{ '/assets/js/jobs-data.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/jobs-data.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 <script>
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
   document.addEventListener('DOMContentLoaded', () => {
