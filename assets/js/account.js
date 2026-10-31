@@ -1,5 +1,6 @@
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { getAuth } from "https://gstatic.com";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://gstatic.com";
+
 
 const auth = getAuth();
 const db = getFirestore();
