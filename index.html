@@ -2,8 +2,7 @@
 layout: default
 title: JobTeens
 ---
-
-<style>
+ <style>
   /* Header Styling */
   .header-nav-container {
     display: flex;
@@ -174,19 +173,28 @@ title: JobTeens
     background-color: #7f1d1d;
   }
 
-  /* Job Badge and Wage Layout Adjustments */
+  /* Job Card Layout Styles */
+  .job-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
   .job-meta-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 8px 0;
+    margin: 12px 0;
   }
 
   .job-badge {
     background: #e0f2fe;
     color: #0369a1;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
   }
@@ -194,7 +202,8 @@ title: JobTeens
   .job-wage {
     font-weight: bold;
     color: #10b981;
-    margin: 4px 0;
+    margin: 6px 0;
+    font-size: 16px;
   }
 </style>
 <!-- FULLSCREEN INTRO -->
@@ -299,15 +308,17 @@ title: JobTeens
       card.className = 'job-card';
       card.setAttribute('data-age', job.minAge);
       card.setAttribute('data-location', job.location);
-      // Create badges HTML
-      const badgesHTML = job.tags.map(tag => `
-			<span class="job-badge">${tag}</span>`).join('');
+      // Map tags into custom layout badge loops safely
+      const badgesHTML = (job.tags || []).map(tag => `
+        
+			<span class="job-badge">${tag}</span>
+      `).join('');
       card.innerHTML = `
         
 			<h3 class="job-title">${job.title}</h3>
 			<p class="company">${job.company}</p>
 			<span class="location">${job.location}</span>
-			<p class="job-wage">${job.wage}</p>
+			<p class="job-wage">${job.wage || 'Competitive pay'}</p>
 			<div class="job-meta-row">
 				<span class="job-badge" style="background:#fee2e2; color:#991b1b;">Age: ${job.minAge}+</span>
           ${badgesHTML}
