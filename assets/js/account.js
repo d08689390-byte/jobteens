@@ -1,5 +1,5 @@
-import { getAuth } from "https://gstatic.com";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://gstatic.com";
+import { getAuth } from "https://unpkg.com/firebase@12.19.0";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://unpkg.com/firebase@12.19.0";
 
 
 const auth = getAuth();
