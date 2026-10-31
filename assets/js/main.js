@@ -1,7 +1,24 @@
 ---
 ---
-import { jobsData } from './jobs-data.js';
+// Add these lines to the absolute top of main.js
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { jobsData } from "./jobs-data.js";
 
+// Your Firebase configuration block goes here
+const firebaseConfig = {
+  apiKey: "AIzaSyAvCFQ9_zf7WMR9OTqo0SP8Dc9eey5m3G8",
+  authDomain: "jobteens.firebaseapp.com",
+  projectId: "jobteens",
+  storageBucket: "jobteens.firebasestorage.app",
+  messagingSenderId: "205272038289",
+  appId: "1:205272038289:web:b92e318944db72f39cb830",
+  measurementId: "G-VDP94DYCKG"
+};
+
+// Initialize Firebase App & Auth modules seamlessly
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 window.addEventListener("load", () => {
   const sound = document.getElementById("gba-sound");
   if (!sound) return;
