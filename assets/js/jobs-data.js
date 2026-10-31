@@ -1,4 +1,3 @@
-// Database of available job openings for JobTeens
 window.jobsData = [
   {
     "id": 1,
@@ -6,6 +5,8 @@ window.jobsData = [
     "company": "Local Bakery Co.",
     "location": "Leicester, UK",
     "minAge": 14,
+    "wage": "£7.50 / hr",
+    "tags": ["Weekend", "Part-time", "Retail"],
     "applyUrl": "/jobs/retail-assistant.html"
   },
   {
@@ -14,6 +15,8 @@ window.jobsData = [
     "company": "The Park Cafe",
     "location": "Nottingham, UK",
     "minAge": 16,
+    "wage": "£8.60 / hr",
+    "tags": ["Seasonal", "Flexible hours", "Catering"],
     "applyUrl": "/jobs/cafe-staff.html"
   }
 ];
