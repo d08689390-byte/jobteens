@@ -1,8 +1,8 @@
 ---
 ---
 // Add these lines to the absolute top of main.js
-import { initializeApp } from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/app/package.json";
-import { getAuth } from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/app/package.json";
+import { initializeApp } from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/firebase-app.js";
+import { getAuth } from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/firebase-auth.js";
 import { jobsData } from "./jobs-data.js";
 
 // Your Firebase configuration block goes here
