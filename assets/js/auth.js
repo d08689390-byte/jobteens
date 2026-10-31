@@ -4,13 +4,13 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup 
-} from "https://gstatic.com";
+} from "https://unpkg.com";
 
 import { 
   getFirestore, 
   doc, 
   setDoc 
-} from "https://gstatic.com";
+} from "https://unpkg.com";
 
 const auth = getAuth();
 const db = getFirestore();
