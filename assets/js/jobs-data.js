@@ -1,3 +1,23 @@
+// Inside main.js - replace your loadJobs function with this:
+async function loadJobs() {
+  try {
+    // Stop fetching the non-existent json file
+    // Directly pull from the verified global window data source
+    const jobs = window.jobsData || [];
+    
+    if (!jobs || jobs.length === 0) {
+      console.warn("No local jobs found inside window.jobsData");
+    }
+    
+    // Call your existing UI rendering loop function with the array data
+    renderJobs(jobs); 
+    
+  } catch (error) {
+    console.error("Unable to load jobs:", error);
+  }
+}
+
+
 window.jobsData = [
   {
     "id": 1,
