@@ -1,5 +1,6 @@
 ---
 ---
+import { jobsData } from './jobs-data.js';
 
 window.addEventListener("load", () => {
   const sound = document.getElementById("gba-sound");
