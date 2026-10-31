@@ -1,8 +1,8 @@
 ---
 ---
 // Add these lines to the absolute top of main.js
-import { initializeApp } from "https://gstatic.com";
-import { getAuth } from "https://gstatic.com";
+import { initializeApp } from "https://unpkg.com";
+import { getAuth } from "https://unpkg.com";
 import { jobsData } from "./jobs-data.js";
 
 // Your Firebase configuration block goes here
