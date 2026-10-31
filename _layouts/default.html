@@ -13,8 +13,8 @@
   </header>
 
   {{ content }}
-
-
+<script src="{{ '/assets/js/jobs-data.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+<script type="module" src="{{ '/assets/js/auth.js' | relative_url }}"></script>
 <script type="module" src="{{ '/assets/js/account.js' | relative_url }}"></script>
 <script type="module" src="{{ '/assets/js/messages.js' | relative_url }}"></script>
 <script type="module" src="{{ '/assets/js/main.js' | relative_url }}"></script>
