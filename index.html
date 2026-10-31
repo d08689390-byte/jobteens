@@ -258,10 +258,27 @@ title: JobTeens
       <option value="17">17</option>
       <option value="18-25(neurodivergent)">18-25</option>
     </select>
+    
     <label for="filter-location">Location:</label>
-    <input id="filter-location" type="text" placeholder="Enter postcode or area">
+    <input id="filter-location" type="text" placeholder="Postcode or area">
+
+    <!-- ADDED: Minimum Wage Select Input Filter -->
+    <label for="filter-wage">Min Wage (£):</label>
+    <select id="filter-wage">
+      <option value="">Any Wage</option>
+      <option value="7.00">£7.00+</option>
+      <option value="8.00">£8.00+</option>
+      <option value="9.00">£9.00+</option>
+      <option value="10.00">£10.00+</option>
+    </select>
+
+    <!-- ADDED: Job Category/Tags Keyword Search Filter -->
+    <label for="filter-tag">Keyword/Tag:</label>
+    <input id="filter-tag" type="text" placeholder="e.g. Weekend, Retail">
+
     <button id="apply-filter">Apply Filter</button>
   </div>
+
   <h2>Job Listings</h2>
   <!-- Fallback Empty State Message Box with Dynamic Reset Button -->
   <div id="no-jobs-alert">
@@ -284,7 +301,6 @@ title: JobTeens
       <span>💬</span> Join Our Discord Server </a>
   </div>
 </section>
-<script src="https://cyberstaff.com" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
 <!-- Link to external dataset script file -->
 <script src="{{ '/assets/js/jobs-data.js' | relative_url }}"></script>
 <script>
