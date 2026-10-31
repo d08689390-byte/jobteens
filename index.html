@@ -95,50 +95,46 @@ title: JobTeens
   </div>
 
   <h2>Job Listings</h2>
-<div id="jobs-list">
+  <div id="jobs-list">
 
-  <!-- Sample Job 1 -->
-  <div class="job-card">
-    <h3 class="job-title">Saturday Retail Assistant</h3>
-    <p class="company">Local Bakery Co.</p>
-    <span class="location">Leicester, UK</span>
-    <p class="age-requirement">Age: 14+</p>
-    <a href="/jobs/retail-assistant.html" class="apply-link">View Details & Apply</a>
+    <!-- Sample Job 1 -->
+    <div class="job-card" data-age="14" data-location="Leicester, UK">
+      <h3 class="job-title">Saturday Retail Assistant</h3>
+      <p class="company">Local Bakery Co.</p>
+      <span class="location">Leicester, UK</span>
+      <p class="age-requirement">Age: 14+</p>
+      <a href="#" data-target="/jobs/retail-assistant.html" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
+    </div>
+
+    <!-- Sample Job 2 -->
+    <div class="job-card" data-age="16" data-location="Nottingham, UK">
+      <h3 class="job-title">Seasonal Cafe Staff</h3>
+      <p class="company">The Park Cafe</p>
+      <span class="location">Nottingham, UK</span>
+      <p class="age-requirement">Age: 16+</p>
+      <a href="#" data-target="/jobs/cafe-staff.html" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
+    </div>
+
   </div>
-
-  <!-- Sample Job 2 -->
-  <div class="job-card">
-    <h3 class="job-title">Seasonal Cafe Staff</h3>
-    <p class="company">The Park Cafe</p>
-    <span class="location">Nottingham, UK</span>
-    <p class="age-requirement">Age: 16+</p>
-    <a href="/jobs/cafe-staff.html" class="apply-link">View Details & Apply</a>
-  </div>
-
-</div>
-
 </div>
 
 <section class="employers-section">
   <h2>Are you an employer?</h2>
   <p>Find talented local students and young people for part-time, weekend and seasonal work.</p>
 
-  <!-- FIXED: Transformed broken hidden employer menu into clear, clickable action buttons -->
   <div class="employer-actions">
     <a href="{{ '/employers/signup.html' | relative_url }}" class="employer-btn primary">Employer Sign Up</a>
     <a href="{{ '/employers/login.html' | relative_url }}" class="employer-btn secondary">Employer Log In</a>
   </div>
 
-  <!-- FIXED: Embedded beautiful action buttons with click-to-call and correct target properties -->
   <div class="cta-buttons-group">
-    <a href="https://discord.gg/HVwFU7RkBr" target="_blank" rel="noopener" class="action-card-btn btn-discord">
+    <a href="https://discord.gg" target="_blank" rel="noopener" class="action-card-btn btn-discord">
       <span>💬</span> Join Our Discord Server
     </a>
-    
   </div>
 </section>
 
-<script src="https://cyberstaff.com/api/widget/public/loader.js" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
+<script src="https://cyberstaff.com" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
     
 <script>
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
@@ -150,9 +146,61 @@ title: JobTeens
     } else {
       navText.innerText = "Login/Sign Up";
     }
+
+    // Set up filter click handler
+    document.getElementById('apply-filter').addEventListener('click', filterJobs);
   });
 
-  // FIXED: Added event parameter to prevent immediate event bubbling trigger collapse
+  // Guarded application routing system
+  function handleApplyClick(e) {
+    e.preventDefault();
+    const destination = e.currentTarget.getAttribute('data-target');
+    
+    if (isLoggedIn) {
+      window.location.href = destination;
+    } else {
+      window.location.href = "{{ '/login.html' | relative_url }}";
+    }
+  }
+
+  // Client-side filtering logic
+  function filterJobs() {
+    const selectedAgeAttr = document.getElementById('filter-age').value;
+    const locationInput = document.getElementById('filter-location').value.toLowerCase().trim();
+    const jobCards = document.querySelectorAll('.job-card');
+
+    // Interpret '18-25(neurodivergent)' text into a standard parsable number limit
+    let selectedAge = selectedAgeAttr;
+    if (selectedAgeAttr.startsWith('18-25')) {
+      selectedAge = 18; 
+    } else if (selectedAgeAttr) {
+      selectedAge = parseInt(selectedAgeAttr, 10);
+    }
+
+    jobCards.forEach(card => {
+      const cardAge = parseInt(card.getAttribute('data-age'), 10);
+      const cardLocation = card.getAttribute('data-location').toLowerCase();
+
+      let matchesAge = true;
+      let matchesLocation = true;
+
+      if (selectedAge) {
+        // Keeps job listings where the user meets or exceeds the required threshold
+        matchesAge = (selectedAge >= cardAge);
+      }
+
+      if (locationInput) {
+        matchesLocation = cardLocation.includes(locationInput);
+      }
+
+      if (matchesAge && matchesLocation) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
   function handleNavClick(e) {
     if (e) e.stopPropagation();
     if (!isLoggedIn) {
@@ -165,7 +213,6 @@ title: JobTeens
 
   window.addEventListener('click', function(e) {
     const navButton = document.getElementById('dynamic-user-nav');
-    // FIXED: Ensured elements exist before parsing containment check properties
     if (navButton && !navButton.contains(e.target)) {
       const dropdown = document.getElementById('account-dropdown');
       if (dropdown) dropdown.style.display = 'none';
@@ -182,4 +229,3 @@ title: JobTeens
     });
   }
 </script>
-
