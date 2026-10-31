@@ -10,7 +10,7 @@ import {
   getFirestore, 
   doc, 
   setDoc 
-} from "firebase/firestore";
+} from "https://gstatic.com";
 
 const auth = getAuth();
 const db = getFirestore();
