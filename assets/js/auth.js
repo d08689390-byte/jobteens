@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup 
-} from "firebase/auth";
+} from "https://gstatic.com";
 
 import { 
   getFirestore, 
