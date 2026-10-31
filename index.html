@@ -1,37 +1,157 @@
----
-layout: default
-title: JobTeens
----
-
-<style>
+--- layout: default title: JobTeens --- <style>
   /* Header Styling */
-  .header-nav-container { display: flex; justify-content: flex-end; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #e5e7eb; position: relative; }
-  .profile-link-btn { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #333; font-weight: 600; cursor: pointer; border: 1px solid #ccc; padding: 6px 12px; border-radius: 20px; background: white; }
-  .profile-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
-  .nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 10px; background: white; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 180px; z-index: 100; margin-top: 5px; }
-  .nav-dropdown-menu a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }
-  .nav-dropdown-menu a:last-child { border-bottom: none; }
-  .nav-dropdown-menu a:hover { background: #f3f4f6; }
+  .header-nav-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+  }
+
+  .profile-link-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: white;
+  }
+
+  .profile-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 180px;
+    z-index: 100;
+    margin-top: 5px;
+  }
+
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-dropdown-menu a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-dropdown-menu a:hover {
+    background: #f3f4f6;
+  }
 
   /* Added Employer Area Button Wrapper Styling */
-  .employer-actions { display: flex; gap: 10px; margin: 15px 0; }
-  .employer-btn { padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 6px; border: 1px solid #0076df; font-size: 14px; }
-  .employer-btn.primary { background: #0076df; color: white; }
-  .employer-btn.secondary { background: white; color: #0076df; }
-  .employer-btn:hover { opacity: 0.9; }
+  .employer-actions {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .employer-btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    border: 1px solid #0076df;
+    font-size: 14px;
+  }
+
+  .employer-btn.primary {
+    background: #0076df;
+    color: white;
+  }
+
+  .employer-btn.secondary {
+    background: white;
+    color: #0076df;
+  }
+
+  .employer-btn:hover {
+    opacity: 0.9;
+  }
 
   /* New Stylish CTA Button System */
-  .cta-buttons-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; font-family: sans-serif; }
-  .action-card-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 15px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.1s ease, box-shadow 0.1s ease; }
-  .action-card-btn:active { transform: scale(0.98); }
-  
-  /* Button Themes */
-  .btn-discord { background: #5865F2; color: white; box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2); }
-  .btn-discord:hover { background: #4752C4; }
-  .btn-phone { background: #10B981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-  .btn-phone:hover { background: #059669; }
-</style>
+  .cta-buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+    font-family: sans-serif;
+  }
 
+  .action-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .action-card-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Button Themes */
+  .btn-discord {
+    background: #5865F2;
+    color: white;
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2);
+  }
+
+  .btn-discord:hover {
+    background: #4752C4;
+  }
+
+  .btn-phone {
+    background: #10B981;
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  }
+
+  .btn-phone:hover {
+    background: #059669;
+  }
+
+  /* Empty State Alert Box Styling */
+  #no-jobs-alert {
+    display: none;
+    padding: 20px;
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: #991b1b;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-weight: 500;
+    text-align: center;
+  }
+</style>
 <!-- FULLSCREEN INTRO -->
 <div id="intro-screen">
   <div id="white-flash"></div>
@@ -48,7 +168,6 @@ title: JobTeens
   </div>
   <div id="intro-tagline">Youth-powered jobs for The Youth</div>
 </div>
-
 <!-- TOP GLOBAL NAVIGATION SYSTEM -->
 <div class="header-nav-container">
   <div style="position: relative;">
@@ -59,7 +178,6 @@ title: JobTeens
       </svg>
       <span id="nav-button-text">Login/Sign Up</span>
     </button>
-    
     <!-- Account Actions Dropdown -->
     <div class="nav-dropdown-menu" id="account-dropdown">
       <a href="{{ '/account.html' | relative_url }}">⚙️ Settings</a>
@@ -70,12 +188,10 @@ title: JobTeens
     </div>
   </div>
 </div>
-
 <div id="site-content">
   <link rel="manifest" href="/manifest.json">
   <h1>JobTeens</h1>
   <p>Welcome to JobTeens — a UK-focused job board for ages 13–17 (and up to 25 for neurodivergent applicants).</p>
-
   <h2>Filter Jobs</h2>
   <div id="filter-box">
     <label for="filter-age">Age:</label>
@@ -88,57 +204,34 @@ title: JobTeens
       <option value="17">17</option>
       <option value="18-25(neurodivergent)">18-25</option>
     </select>
-
     <label for="filter-location">Location:</label>
     <input id="filter-location" type="text" placeholder="Enter postcode or area">
     <button id="apply-filter">Apply Filter</button>
   </div>
-
   <h2>Job Listings</h2>
+  <!-- Fallback Empty State Message Box -->
+  <div id="no-jobs-alert"> Sorry there are currently no jobs either in your area or for your age, check back soon or update the filter settings </div>
   <div id="jobs-list">
-
-    <!-- Sample Job 1 -->
-    <div class="job-card" data-age="14" data-location="Leicester, UK">
-      <h3 class="job-title">Saturday Retail Assistant</h3>
-      <p class="company">Local Bakery Co.</p>
-      <span class="location">Leicester, UK</span>
-      <p class="age-requirement">Age: 14+</p>
-      <a href="#" data-target="/jobs/retail-assistant.html" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
-    </div>
-
-    <!-- Sample Job 2 -->
-    <div class="job-card" data-age="16" data-location="Nottingham, UK">
-      <h3 class="job-title">Seasonal Cafe Staff</h3>
-      <p class="company">The Park Cafe</p>
-      <span class="location">Nottingham, UK</span>
-      <p class="age-requirement">Age: 16+</p>
-      <a href="#" data-target="/jobs/cafe-staff.html" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
-    </div>
-
+    <!-- Populated dynamically via Javascript -->
   </div>
 </div>
-
 <section class="employers-section">
   <h2>Are you an employer?</h2>
   <p>Find talented local students and young people for part-time, weekend and seasonal work.</p>
-
   <div class="employer-actions">
     <a href="{{ '/employers/signup.html' | relative_url }}" class="employer-btn primary">Employer Sign Up</a>
     <a href="{{ '/employers/login.html' | relative_url }}" class="employer-btn secondary">Employer Log In</a>
   </div>
-
   <div class="cta-buttons-group">
-    <a href="https://discord.gg" target="_blank" rel="noopener" class="action-card-btn btn-discord">
-      <span>💬</span> Join Our Discord Server
-    </a>
+    <a href="https://discord.gg/HVwFU7RkBr" target="_blank" rel="noopener" class="action-card-btn btn-discord">
+      <span>💬</span> Join Our Discord Server </a>
   </div>
 </section>
-
-<script src="https://cyberstaff.com" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
-    
+<script src="https://cyberstaff.com/api/widget/public/loader.js" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
+<!-- Link to external dataset script file -->
+<script src="{{ '/assets/js/jobs-data.js' | relative_url }}"></script>
 <script>
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
-
   document.addEventListener('DOMContentLoaded', () => {
     const navText = document.getElementById('nav-button-text');
     if (isLoggedIn) {
@@ -146,59 +239,86 @@ title: JobTeens
     } else {
       navText.innerText = "Login/Sign Up";
     }
-
-    // Set up filter click handler
+    // Process initial database array setup and map configurations
+    renderJobs(window.jobsData || []);
     document.getElementById('apply-filter').addEventListener('click', filterJobs);
   });
-
+  // Generates HTML Cards from modern array parameters
+  function renderJobs(jobs) {
+    const listContainer = document.getElementById('jobs-list');
+    listContainer.innerHTML = '';
+    jobs.forEach(job => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.setAttribute('data-age', job.minAge);
+      card.setAttribute('data-location', job.location);
+      card.innerHTML = `
+        
+			<h3 class="job-title">${job.title}</h3>
+			<p class="company">${job.company}</p>
+			<span class="location">${job.location}</span>
+			<p class="age-requirement">Age: ${job.minAge}+</p>
+			<a href="#" data-target="${job.applyUrl}" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
+      `;
+      listContainer.appendChild(card);
+    });
+    toggleEmptyState();
+  }
   // Guarded application routing system
   function handleApplyClick(e) {
     e.preventDefault();
     const destination = e.currentTarget.getAttribute('data-target');
-    
     if (isLoggedIn) {
       window.location.href = destination;
     } else {
       window.location.href = "{{ '/login.html' | relative_url }}";
     }
   }
-
   // Client-side filtering logic
   function filterJobs() {
     const selectedAgeAttr = document.getElementById('filter-age').value;
     const locationInput = document.getElementById('filter-location').value.toLowerCase().trim();
     const jobCards = document.querySelectorAll('.job-card');
-
-    // Interpret '18-25(neurodivergent)' text into a standard parsable number limit
     let selectedAge = selectedAgeAttr;
     if (selectedAgeAttr.startsWith('18-25')) {
-      selectedAge = 18; 
+      selectedAge = 18;
     } else if (selectedAgeAttr) {
       selectedAge = parseInt(selectedAgeAttr, 10);
     }
-
     jobCards.forEach(card => {
       const cardAge = parseInt(card.getAttribute('data-age'), 10);
       const cardLocation = card.getAttribute('data-location').toLowerCase();
-
       let matchesAge = true;
       let matchesLocation = true;
-
       if (selectedAge) {
-        // Keeps job listings where the user meets or exceeds the required threshold
         matchesAge = (selectedAge >= cardAge);
       }
-
       if (locationInput) {
         matchesLocation = cardLocation.includes(locationInput);
       }
-
       if (matchesAge && matchesLocation) {
         card.style.display = 'block';
       } else {
         card.style.display = 'none';
       }
     });
+    toggleEmptyState();
+  }
+  // Check visibility stack counts and toggles feedback banner
+  function toggleEmptyState() {
+    const jobCards = document.querySelectorAll('.job-card');
+    const alertBox = document.getElementById('no-jobs-alert');
+    let visibleCount = 0;
+    jobCards.forEach(card => {
+      if (card.style.display !== 'none') {
+        visibleCount++;
+      }
+    });
+    if (visibleCount === 0) {
+      alertBox.style.display = 'block';
+    } else {
+      alertBox.style.display = 'none';
+    }
   }
 
   function handleNavClick(e) {
@@ -210,22 +330,16 @@ title: JobTeens
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
   }
-
   window.addEventListener('click', function(e) {
+    Use code with caution.
     const navButton = document.getElementById('dynamic-user-nav');
     if (navButton && !navButton.contains(e.target)) {
       const dropdown = document.getElementById('account-dropdown');
       if (dropdown) dropdown.style.display = 'none';
     }
   });
-</script>
-
-<script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('Service Worker registered!', reg))
-        .catch(err => console.log('Service Worker registration failed: ', err));
+      navigator.serviceWorker.register('/sw.js').then(reg => console.log('Service Worker registered!', reg)).catch(err => console.log('Service Worker registration failed: ', err));
     });
   }
-</script>
