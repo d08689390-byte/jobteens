@@ -4,13 +4,13 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup 
-} from "https://unpkg.com/firebase@12.19.0";
+} from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/app/package.json";
 
 import { 
   getFirestore, 
   doc, 
   setDoc 
-} from "https://unpkg.com/firebase@12.19.0";
+} from "https://cdn.jsdelivr.net/npm/firebase@12.19.0/app/package.json";
 
 const auth = getAuth();
 const db = getFirestore();
