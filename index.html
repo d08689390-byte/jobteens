@@ -312,102 +312,124 @@ title: JobTeens
     } else {
       navText.innerText = "Login/Sign Up";
     }
-    renderJobs(window.jobsData || []);
-    document.getElementById('apply-filter').addEventListener('click', filterJobs);
-  });
-  // Generates HTML Cards from modern array parameters including wages and badges
-  function renderJobs(jobs) {
+   renderJobs(window.jobsData || []);
+document.getElementById('apply-filter').addEventListener('click', filterJobs);
+});
+
+function renderJobs(jobs) {
     const listContainer = document.getElementById('jobs-list');
     listContainer.innerHTML = '';
+
     jobs.forEach(job => {
-      const card = document.createElement('div');
-      card.className = 'job-card';
-      card.setAttribute('data-age', job.minAge);
-      card.setAttribute('data-location', job.location);
-      // Map tags into custom layout badge loops safely
-      const badgesHTML = (job.tags || []).map(tag => `
-        
-			<span class="job-badge">${tag}</span>
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        card.setAttribute('data-age', job.minAge);
+        card.setAttribute('data-location', job.location);
+
+        // FIXED: Strips alphabet tokens instantly so card evaluations receive a pure numeric baseline float
+        const numericWage = parseFloat((job.wage || "0").replace(/[^0-9.]/g, '')) || 0;
+        card.setAttribute('data-wage', numericWage);
+
+        const tagsString = (job.tags || []).join(',').toLowerCase();
+        card.setAttribute('data-tags', tagsString);
+
+        const badgesHTML = (job.tags || []).map(tag => `
+        <span class="job-badge">${tag}</span>
       `).join('');
-      card.innerHTML = `
-        
-			<h3 class="job-title">${job.title}</h3>
-			<p class="company">${job.company}</p>
-			<span class="location">${job.location}</span>
-			<p class="job-wage">${job.wage || 'Competitive pay'}</p>
-			<div class="job-meta-row">
-				<span class="job-badge" style="background:#fee2e2; color:#991b1b;">Age: ${job.minAge}+</span>
-          ${badgesHTML}
-        
-			</div>
-			<a href="#" data-target="${job.applyUrl}" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
-      `;
-      listContainer.appendChild(card);
+
+        card.innerHTML = `
+        <h3 class="job-title">${job.title}</h3>
+        <p class="company">${job.company}</p>
+        <span class="location">${job.location}</span>
+        <p class="job-wage">${job.wage || 'Competitive pay'}</p>
+        <div class="job-meta-row">
+
+Age: ${job.minAge}+
+${badgesHTML}
+
+View Details & Apply
+`;
+        listContainer.appendChild(card);
     });
     toggleEmptyState();
-  }
-  // Guarded application routing system
-  function handleApplyClick(e) {
+}
+
+function handleApplyClick(e) {
     e.preventDefault();
     const destination = e.currentTarget.getAttribute('data-target');
     if (isLoggedIn) {
-      window.location.href = destination;
+        window.location.href = destination;
     } else {
-      window.location.href = "{{ '/login.html' | relative_url }}";
+        window.location.href = "{{ '/login.html' | relative_url }}";
     }
-  }
-  // Client-side filtering logic
-  function filterJobs() {
+}
+// FIXED: Multi-constraint range-bound filtering evaluation logic
+function filterJobs() {
     const selectedAgeAttr = document.getElementById('filter-age').value;
     const locationInput = document.getElementById('filter-location').value.toLowerCase().trim();
+    const wageInput = document.getElementById('filter-wage').value;
+    const tagInput = document.getElementById('filter-tag').value.toLowerCase().trim();
     const jobCards = document.querySelectorAll('.job-card');
     let selectedAge = selectedAgeAttr;
     if (selectedAgeAttr.startsWith('18-25')) {
-      selectedAge = 18;
+        selectedAge = 18;
     } else if (selectedAgeAttr) {
-      selectedAge = parseInt(selectedAgeAttr, 10);
+        selectedAge = parseInt(selectedAgeAttr, 10);
     }
     jobCards.forEach(card => {
-      const cardAge = parseInt(card.getAttribute('data-age'), 10);
-      const cardLocation = card.getAttribute('data-location').toLowerCase();
-      let matchesAge = true;
-      let matchesLocation = true;
-      if (selectedAge) {
-        matchesAge = (selectedAge >= cardAge);
-      }
-      if (locationInput) {
-        matchesLocation = cardLocation.includes(locationInput);
-      }
-      if (matchesAge && matchesLocation) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+        const cardAge = parseInt(card.getAttribute('data-age'), 10);
+        const cardLocation = card.getAttribute('data-location').toLowerCase();
+        const cardWage = parseFloat(card.getAttribute('data-wage')) || 0;
+        const cardTags = card.getAttribute('data-tags');
+        let matchesAge = true;
+        let matchesLocation = true;
+        let matchesWage = true;
+        let matchesTag = true;
+        if (selectedAge) {
+            matchesAge = (selectedAge >= cardAge);
+        }
+        if (locationInput) {
+            matchesLocation = cardLocation.includes(locationInput);
+        }
+        // FIXED: Swapped out precise checking logic for a threshold evaluator (Job Wage >= Target Option)
+        if (wageInput) {
+            matchesWage = (cardWage >= parseFloat(wageInput));
+        }
+        if (tagInput) {
+            matchesTag = cardTags.includes(tagInput);
+        }
+        if (matchesAge && matchesLocation && matchesWage && matchesTag) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
     });
     toggleEmptyState();
-  }
-  // Resets inputs and reapplies full list evaluation visibility
-  function clearFilters() {
+}
+
+function clearFilters() {
     document.getElementById('filter-age').value = '';
     document.getElementById('filter-location').value = '';
+    document.getElementById('filter-wage').value = '';
+    document.getElementById('filter-tag').value = '';
     filterJobs();
-  }
-  // Check visibility stack counts and toggles feedback banner
-  function toggleEmptyState() {
+}
+
+function toggleEmptyState() {
     const jobCards = document.querySelectorAll('.job-card');
     const alertBox = document.getElementById('no-jobs-alert');
     let visibleCount = 0;
     jobCards.forEach(card => {
-      if (card.style.display !== 'none') {
-        visibleCount++;
-      }
+        if (card.style.display !== 'none') {
+            visibleCount++;
+        }
     });
     if (visibleCount === 0) {
-      alertBox.style.display = 'block';
+        alertBox.style.display = 'block';
     } else {
-      alertBox.style.display = 'none';
+        alertBox.style.display = 'none';
     }
-  }
+}
 
   function handleNavClick(e) {
     if (e) e.stopPropagation();
