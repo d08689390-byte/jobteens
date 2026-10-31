@@ -1,4 +1,9 @@
---- layout: default title: JobTeens --- <style>
+---
+layout: default
+title: JobTeens
+---
+
+<style>
   /* Header Styling */
   .header-nav-container {
     display: flex;
@@ -61,7 +66,7 @@
     background: #f3f4f6;
   }
 
-  /* Added Employer Area Button Wrapper Styling */
+  /* Employer Area Button Wrapper Styling */
   .employer-actions {
     display: flex;
     gap: 10px;
@@ -142,7 +147,7 @@
   /* Empty State Alert Box Styling */
   #no-jobs-alert {
     display: none;
-    padding: 20px;
+    padding: 25px;
     background-color: #fef2f2;
     border: 1px solid #fee2e2;
     color: #991b1b;
@@ -150,6 +155,46 @@
     margin-top: 15px;
     font-weight: 500;
     text-align: center;
+  }
+
+  .clear-filter-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background-color: #991b1b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .clear-filter-btn:hover {
+    background-color: #7f1d1d;
+  }
+
+  /* Job Badge and Wage Layout Adjustments */
+  .job-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .job-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .job-wage {
+    font-weight: bold;
+    color: #10b981;
+    margin: 4px 0;
   }
 </style>
 <!-- FULLSCREEN INTRO -->
@@ -209,8 +254,11 @@
     <button id="apply-filter">Apply Filter</button>
   </div>
   <h2>Job Listings</h2>
-  <!-- Fallback Empty State Message Box -->
-  <div id="no-jobs-alert"> Sorry there are currently no jobs either in your area or for your age, check back soon or update the filter settings </div>
+  <!-- Fallback Empty State Message Box with Dynamic Reset Button -->
+  <div id="no-jobs-alert">
+    <div>Sorry there are currently no jobs either in your area or for your age, check back soon or update the filter settings</div>
+    <button class="clear-filter-btn" onclick="clearFilters()">Clear Filters</button>
+  </div>
   <div id="jobs-list">
     <!-- Populated dynamically via Javascript -->
   </div>
@@ -223,11 +271,11 @@
     <a href="{{ '/employers/login.html' | relative_url }}" class="employer-btn secondary">Employer Log In</a>
   </div>
   <div class="cta-buttons-group">
-    <a href="https://discord.gg/HVwFU7RkBr" target="_blank" rel="noopener" class="action-card-btn btn-discord">
+    <a href="https://discord.gg" target="_blank" rel="noopener" class="action-card-btn btn-discord">
       <span>💬</span> Join Our Discord Server </a>
   </div>
 </section>
-<script src="https://cyberstaff.com/api/widget/public/loader.js" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
+<script src="https://cyberstaff.com" data-business-id="a8f9abb2-6d8c-4324-b01d-244a642a1010" async></script>
 <!-- Link to external dataset script file -->
 <script src="{{ '/assets/js/jobs-data.js' | relative_url }}"></script>
 <script>
@@ -239,11 +287,10 @@
     } else {
       navText.innerText = "Login/Sign Up";
     }
-    // Process initial database array setup and map configurations
     renderJobs(window.jobsData || []);
     document.getElementById('apply-filter').addEventListener('click', filterJobs);
   });
-  // Generates HTML Cards from modern array parameters
+  // Generates HTML Cards from modern array parameters including wages and badges
   function renderJobs(jobs) {
     const listContainer = document.getElementById('jobs-list');
     listContainer.innerHTML = '';
@@ -252,12 +299,20 @@
       card.className = 'job-card';
       card.setAttribute('data-age', job.minAge);
       card.setAttribute('data-location', job.location);
+      // Create badges HTML
+      const badgesHTML = job.tags.map(tag => `
+			<span class="job-badge">${tag}</span>`).join('');
       card.innerHTML = `
         
 			<h3 class="job-title">${job.title}</h3>
 			<p class="company">${job.company}</p>
 			<span class="location">${job.location}</span>
-			<p class="age-requirement">Age: ${job.minAge}+</p>
+			<p class="job-wage">${job.wage}</p>
+			<div class="job-meta-row">
+				<span class="job-badge" style="background:#fee2e2; color:#991b1b;">Age: ${job.minAge}+</span>
+          ${badgesHTML}
+        
+			</div>
 			<a href="#" data-target="${job.applyUrl}" class="apply-link" onclick="handleApplyClick(event)">View Details & Apply</a>
       `;
       listContainer.appendChild(card);
@@ -299,10 +354,17 @@
       if (matchesAge && matchesLocation) {
         card.style.display = 'block';
       } else {
+        Use code with caution.
         card.style.display = 'none';
       }
     });
     toggleEmptyState();
+  }
+  // Resets inputs and reapplies full list evaluation visibility
+  function clearFilters() {
+    document.getElementById('filter-age').value = '';
+    document.getElementById('filter-location').value = '';
+    filterJobs();
   }
   // Check visibility stack counts and toggles feedback banner
   function toggleEmptyState() {
@@ -331,7 +393,6 @@
     }
   }
   window.addEventListener('click', function(e) {
-    Use code with caution.
     const navButton = document.getElementById('dynamic-user-nav');
     if (navButton && !navButton.contains(e.target)) {
       const dropdown = document.getElementById('account-dropdown');
