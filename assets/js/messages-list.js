@@ -1,5 +1,5 @@
-import { getAuth } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { getAuth } from './auth.js';
+import { getFirestore, collection, query, where, getDocs } from './auth.js';
 
 const auth = getAuth();
 const db = getFirestore();
