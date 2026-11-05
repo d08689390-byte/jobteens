@@ -10,7 +10,7 @@ import {
   getFirestore, 
   doc, 
   setDoc 
-} from "https://esm.sh/firebase/firestore@4.19.0";
+} from "https://esm.sh/firebase@4.19.0/firestore";
 
 const auth = getAuth();
 const db = getFirestore();
