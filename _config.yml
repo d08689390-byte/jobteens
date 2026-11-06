@@ -1,6 +1,7 @@
 title: JobTeens
 description: Teen job board
-baseurl: "/"
+url: "https://jobteens.dpdns.org"
+baseurl: ""
 markdown: kramdown
 
 collections:
