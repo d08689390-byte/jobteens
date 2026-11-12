@@ -1,5 +1,5 @@
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth } from "./auth";
+import { getFirestore, doc, setDoc } from "./auth";
 
 const auth = getAuth();
 const db = getFirestore();
