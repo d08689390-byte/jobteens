@@ -5,7 +5,7 @@
     "firebase-admin": "^14.5.0",
     "firebase-functions": "^7.4.0",
     "mongoose": "^9.11.4",
-    "playwright": "^1.64.1"
+    "playwright": "^1.65.0"
   },
   "name": "jobteens",
   "version": "1.0.0",
