@@ -97,12 +97,11 @@ Client-side code fetches `jobs.json` and filters results by the user's selected 
 
 ## Roadmap
 
-- [ ] Age verification UI  
-- [ ] Location selector (postcode to area)  
-- [ ] Council permit banners for 13–15  
+- [ ] Age verification UI
+- [ ] Login Page
+- [x] Location selector (postcode to area)   
 - [ ] Employer dashboard  
 - [ ] Accessibility mode for neurodivergent applicants  
-- [ ] Dark turquoise cyber theme  
 
 ---
 
