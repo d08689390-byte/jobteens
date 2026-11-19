@@ -39,79 +39,22 @@ title: Sign up - JobTeens
     <!-- FIXED: Added autocomplete="new-password" for proper browser password generation mechanics -->
     <input id="signup-password" type="password" autocomplete="new-password" required>
 
-    <button type="submit">Create Account</button>
+    <button type="button" onclick="authLogin({ authorizationParams: { screen_hint: 'signup', redirect_uri: window.location.origin + '/account.html' } })">Create Account</button>
   </form>
 
   <div class="divider">or sign up with</div>
 
-  <!-- FIXED: Replaced unpkg root domains with direct favicon asset URLs for visual branding icons -->
-  <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/3840px-Google_Favicon_2025.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail" style="width:16px; height:16px;" alt="Google logo"> Google
-  </button>
-  <button type="button" class="social-btn" onclick="localStorage.setItem('loggedIn', 'true'); window.location.href='./';">
-    <img src="https://github.githubassets.com/favicons/favicon.png" style="width:16px; height:16px;" alt="GitHub logo"> GitHub
-  </button>
+  <button type="button" onclick="authLogin({ authorizationParams: { connection: 'google-oauth2', redirect_uri: window.location.origin + '/account.html' } })">Google</button>
+  <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/3840px-Google_Favicon_2025.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail" style="width:16px; height:16px;" alt="Google logo">
+  <button type="button" onclick="authLogin({ authorizationParams: { connection: 'github', redirect_uri: window.location.origin + '/account.html' } })">GitHub</button>
+  <img src="https://github.githubassets.com/favicons/favicon.png" style="width:16px; height:16px;" alt="GitHub logo">
+
+  
 
   <p style="margin-top:20px; font-size:14px; text-align:center;">Already have an account? <a href="{{ '/login.html' | relative_url }}">Log in</a></p>
 </main>
 
-
-
-
-
-
-<script type="module">
-  // NOTE: If you initialize app settings globally in another layer, remove the base initialization line below
-  import { initializeApp } from "https://gstatic.com";
-  import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithPopup 
-  } from "https://gstatic.com";
-  import { 
-    getFirestore, 
-    doc, 
-    setDoc 
-  } from "https://gstatic.com";
-
-  // TODO: Insert your actual Firebase project configuration settings block here
- const firebaseConfig = {
-  apiKey: "AIzaSyAvCFQ9_zf7WMR9OTqo0SP8Dc9eey5m3G8",
-  authDomain: "jobteens.firebaseapp.com",
-  projectId: "jobteens",
-  storageBucket: "jobteens.firebasestorage.app",
-  messagingSenderId: "205272038289",
-  appId: "1:205272038289:web:b92e318944db72f39cb830",
-  measurementId: "G-VDP94DYCKG"
-};
-
-  // Initialize Services
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-async function handleSignUp(email, password) {
-  try {
-    // 1. Authenticate and create user in Firebase
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // 2. Safe-keep the Firebase UID so your ID check page can read it
-    sessionStorage.setItem("pending_verify_uid", user.uid);
-
-    // 3. Move the user over to your verification step
-    window.location.href = 'id-check.html';
-
-  } catch (error) {
-    console.error("Firebase Auth Error:", error.code, error.message);
-    alert(`Registration failed: ${error.message}`);
-  }
-}
-
-
+<script>
   document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
     const statusBox = document.getElementById('auth-status');
