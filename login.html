@@ -32,7 +32,7 @@ title: Log in - JobTeens
     <label for="login-password">Password</label>
     <input id="login-password" name="password" type="password" autocomplete="current-password" required>
 
-    <button type="submit">Log in</button>
+    <button type="button" onclick="authLogin({ authorizationParams: { redirect_uri: window.location.origin + '/account.html' } })">Log in</button>
     <p id="login-message" role="status" aria-live="polite"></p>
   </form>
 
