@@ -44,7 +44,7 @@ title: Account - JobTeens
         </div>
         <div class="form-group">
           <label for="prof-bio">Short Bio</label>
-          <textarea id="prof-bio" rows="3">Looking for weekend retail roles in London.</textarea>
+          <input id="prof-bio" rows="3"></input>
         </div>
         <button type="submit" class="btn-save">Save Profile</button>
       </form>
@@ -62,11 +62,9 @@ title: Account - JobTeens
       <h4>Your Files</h4>
       <div id="uploaded-files-list">
         <div class="doc-list-item">
-          <span>📄 Alex_Smith_CV_2026.pdf</span>
           <a href="#" style="color:red; font-size:13px;">Delete</a>
         </div>
         <div class="doc-list-item">
-          <span>📄 Cover_Letter_Retail.pdf</span>
           <a href="#" style="color:red; font-size:13px;">Delete</a>
         </div>
       </div>
@@ -91,6 +89,31 @@ title: Account - JobTeens
     </div>
   </section>
 </main>
+<script>
+  (async () => {
+    const client = await window.auth0Promise;
+
+    // 1. Protect the dashboard: redirect to login.html if not signed in
+    if (!(await client.isAuthenticated())) {
+      window.location.replace('/login.html');
+      return;
+    }
+
+    // 2. Load the authenticated user's profile
+    const user = await client.getUser();
+
+    // Update status banner (give your "Checking your sign-in..." element id="auth-status")
+    const statusEl = document.getElementById('auth-status');
+    if (statusEl) statusEl.textContent = `Signed in as ${user.email}`;
+
+    // Populate your existing Profile Details inputs (add id="profile-name" and id="profile-email" to your inputs)
+    const nameInput = document.getElementById('profile-name');
+    const emailInput = document.getElementById('profile-email');
+    if (nameInput) nameInput.value = user.name || user.nickname || '';
+    if (emailInput) emailInput.value = user.email || '';
+  })();
+</script>
+
 
 <script>
   function switchTab(tabId) {
