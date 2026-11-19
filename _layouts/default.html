@@ -5,6 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ './assets/css/style.css' | relative_url }}">
 </head>
+  <!-- 1. Load Auth0 SPA SDK -->
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.18/auth0-spa-js.production.js"></script>
+
+<!-- 2. Shared Auth0 Initialization -->
+<script>
+  window.auth0Promise = (async () => {
+    const client = await auth0.createAuth0Client({
+      domain: 'dev-yvlegzq228y4jjem.uk.auth0.com',
+      clientId: '7RVrz4QVQnx5KYvWQgbFgAqpYrgmK19I',
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    });
+
+    // Handle Auth0 errors in URL
+    if (window.location.search.includes('error=')) {
+      const params = new URLSearchParams(window.location.search);
+      alert(`Authentication Error: ${params.get('error_description') || params.get('error')}`);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    // Handle redirect callback after login/signup
+    if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+      await client.handleRedirectCallback();
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    // Toggle header navigation items based on auth state
+    const isAuthenticated = await client.isAuthenticated();
+    document.querySelectorAll('.auth-logged-in').forEach(el => el.hidden = !isAuthenticated);
+    document.querySelectorAll('.auth-logged-out').forEach(el => el.hidden = isAuthenticated);
+
+    return client;
+  })();
+
+  // Helper functions for buttons across all pages
+  async function authLogin(options = {}) {
+    const client = await window.auth0Promise;
+    await client.loginWithRedirect(options);
+  }
+
+  async function authLogout() {
+    const client = await window.auth0Promise;
+    await client.logout({
+      logoutParams: { returnTo: window.location.origin }
+    });
+  }
+</script>
 <body>
   <header id="site-header">
     <a href="{{ '/' | relative_url }}" id="logo-link">
