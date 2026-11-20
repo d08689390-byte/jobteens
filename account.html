@@ -17,6 +17,24 @@ title: Account - JobTeens
   .btn-save { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 4px; cursor: pointer; align-self: flex-start; }
 </style>
 
+<div id="password-prompt-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:24px; border-radius:8px; max-width:420px; width:90%; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+    <h3 style="margin-top:0;">Set a Backup Password</h3>
+    <p id="password-prompt-text">
+      You signed in with a social account. Please set a password for your JobTeens account so you can always log in directly.
+    </p>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+      <button id="ignore-password-btn" type="button" style="padding:8px 14px; cursor:pointer;">
+        Ignore Suggestion
+      </button>
+      <button id="set-password-btn" type="button" style="padding:8px 14px; background:#0066cc; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+        Set Password
+      </button>
+    </div>
+  </div>
+</div>
+
+
 <main class="page-content account-layout">
   <h1>Your Account Dashboard</h1>
   <div id="account-message" role="status" aria-live="polite">Checking your sign-in...</div>
@@ -90,6 +108,104 @@ title: Account - JobTeens
   </section>
 </main>
 <script>
+async function handleUserAccount(auth0Client) {
+  const user = await auth0Client.getUser();
+  if (!user) return;
+
+  // --- 1. AUTOFILL PROFILE DETAILS ON FIRST SOCIAL LOGIN ---
+  // Update these selectors to match your actual input IDs/names in account.html
+  const nameInput = document.querySelector('input[name="fullName"], #full-name');
+  const emailInput = document.querySelector('input[name="email"], #email-address');
+  const bioInput = document.querySelector('textarea[name="bio"], #short-bio');
+
+  // Only autofill if the user hasn't saved custom profile data yet
+  const isNewProfile = !localStorage.getItem(`jobteens_profile_saved_${user.sub}`);
+  
+  if (isNewProfile) {
+    if (nameInput && (!nameInput.value || nameInput.value === 'Alex Smith')) {
+      nameInput.value = user.name || `${user.given_name || ''} ${user.family_name || ''}`.trim();
+    }
+    if (emailInput && (!emailInput.value || emailInput.value === 'alex@example.com')) {
+      emailInput.value = user.email || '';
+    }
+    if (bioInput && !bioInput.value && user.nickname) {
+      bioInput.value = `Hi, I'm ${user.given_name || user.nickname}! Looking for opportunities on JobTeens.`;
+    }
+    // Optional: Automatically trigger your existing saveProfile() function here
+  }
+
+  // --- 2. CHECK 3-DAY PASSWORD REQUIREMENT ---
+  const namespace = 'https://jobteens.co.uk';
+  const hasPassword = user[`${namespace}has_password`];
+  const isSocial = user[`${namespace}is_social`];
+  const firstSocialLogin = user[`${namespace}first_social_login`];
+
+  if (isSocial && !hasPassword && firstSocialLogin) {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const daysElapsed = (Date.now() - firstSocialLogin) / msInDay;
+
+    const modal = document.getElementById('password-prompt-modal');
+    const promptText = document.getElementById('password-prompt-text');
+    const ignoreBtn = document.getElementById('ignore-password-btn');
+    const setBtn = document.getElementById('set-password-btn');
+
+    modal.style.display = 'flex';
+
+    if (daysElapsed >= 3) {
+      // Day 3 or later: Lock out the ignore button
+      promptText.textContent = "Sorry, you can no longer ignore this message. Please set a password to continue using your account.";
+      ignoreBtn.disabled = true;
+      ignoreBtn.style.opacity = '0.5';
+      ignoreBtn.style.cursor = 'not-allowed';
+      ignoreBtn.title = "Sorry you can no longer ignore this message, please set a password";
+      
+      // Also alert if they try clicking the disabled area
+      ignoreBtn.parentElement.addEventListener('click', (e) => {
+        if (e.target === ignoreBtn) {
+          alert("Sorry you can no longer ignore this message, please set a password");
+        }
+      });
+    } else {
+      // Days 0–2: Allow dismissing for the current login session
+      const daysLeft = Math.ceil(3 - daysElapsed);
+      promptText.textContent = `You signed in with a social account and haven't set a password yet. You can ignore this for ${daysLeft} more day(s).`;
+      
+      ignoreBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    }
+
+    setBtn.addEventListener('click', () => {
+      // Redirect to your password setup / Auth0 password reset or account linking flow
+      triggerSetPasswordFlow(user.email);
+    });
+  }
+}
+
+async function triggerSetPasswordFlow(email) {
+  // Triggers Auth0's password reset/creation email for their email address
+  // Note: Ensure the Database connection (Username-Password-Authentication) is enabled for your app
+  await fetch(`dev-yvlegzq228y4jjem.uk.auth0.com`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: '7RVrz4QVQnx5KYvWQgbFgAqpYrgmK19I',
+      email: email,
+      connection: 'Username-Password-Authentication'
+    })
+  });
+  alert(`We've sent a password setup link to ${email}. Please check your inbox!`);
+}
+
+
+
+
+
+
+
+
+
+  
   (async () => {
     const client = await window.auth0Promise;
 
