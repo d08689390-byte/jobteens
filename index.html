@@ -174,6 +174,7 @@ title: JobTeens
       type="button"
       class="profile-link-btn"
       id="dynamic-user-nav"
+      data-login-url="{{ '/login' | relative_url }}"
       aria-expanded="false"
       aria-controls="account-dropdown"
     >
@@ -193,6 +194,7 @@ title: JobTeens
     </div>
   </nav>
 </header>
+
 
 
 <main id="site-content">
@@ -411,6 +413,63 @@ ob.tags)) return job.tags;
       updateEmptyState();
     }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const navBtn = document.getElementById("dynamic-user-nav");
+  const navText = document.getElementById("nav-button-text");
+  const dropdown = document.getElementById("account-dropdown");
+  const logoutBtn = document.getElementById("logout-link");
+
+  // REPLACE THIS with your actual authentication check (e.g., localStorage.getItem("userToken"))
+  const isLoggedIn = Boolean(localStorage.getItem("user")); 
+
+  // Update button label if user is logged in
+  if (isLoggedIn) {
+    navText.textContent = "My Account";
+  }
+
+  navBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // 1. If NOT logged in, go straight to /login
+    if (!isLoggedIn) {
+      window.location.href = navBtn.dataset.loginUrl;
+      return;
+    }
+
+    // 2. If logged in, toggle the dropdown menu
+    const isExpanded = navBtn.getAttribute("aria-expanded") === "true";
+    navBtn.setAttribute("aria-expanded", !isExpanded);
+    dropdown.hidden = isExpanded;
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!navBtn.contains(e.target) && !dropdown.contains(e.target)) {
+      navBtn.setAttribute("aria-expanded", "false");
+      dropdown.hidden = true;
+    }
+  });
+
+  // Close dropdown with Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !dropdown.hidden) {
+      navBtn.setAttribute("aria-expanded", "false");
+      dropdown.hidden = true;
+      navBtn.focus();
+    }
+  });
+
+  // Handle Log Out
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("user"); // Clear your auth session here
+    window.location.href = navBtn.dataset.loginUrl;
+  });
+});
+
+
+
+  
+
     function filterJobs() {
       const ageValue = document.getElementById('filter-age').value;
       const locationValue = document
@@ -462,9 +521,7 @@ ob.tags)) return job.tags;
       .addEventListener('click', filterJobs);
 
     document
-      .getElementById('clear-
-380
-filters')
+      .getElementById('clear-filters')
       .addEventListener('click', clearFilters);
 
     const jobs = window.jobsData;
