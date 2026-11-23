@@ -170,20 +170,18 @@ title: JobTeens
 
 <header class="header-nav-container">
   <nav class="account-nav" aria-label="Account navigation">
-    <button
-      type="button"
+    <!-- Standard link by default so /login ALWAYS works -->
+    <a
+      href="{{ '/login' | relative_url }}"
       class="profile-link-btn"
       id="dynamic-user-nav"
-      data-login-url="{{ '/login' | relative_url }}"
-      aria-expanded="false"
-      aria-controls="account-dropdown"
     >
       <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="8" r="4"></circle>
         <path d="M4 21c.7-4 3.4-6 8-6s7.3 2 8 6"></path>
       </svg>
       <span id="nav-button-text">Login/Sign Up</span>
-    </button>
+    </a>
 
     <div class="nav-dropdown-menu" id="account-dropdown" hidden>
       <a href="{{ '/account.html#settings' | relative_url }}"><span aria-hidden="true">⚙</span> Settings</a>
