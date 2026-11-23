@@ -184,12 +184,12 @@ title: JobTeens
       <span id="nav-button-text">Login/Sign Up</span>
     </button>
 
-    <div class="nav-dropdo
-1000
-wn-menu" id="account-dropdown" hidden>
+    <div class="nav-dropdown-menu" id="account-dropdown" hidden>
       <a href="{{ '/account.html#settings' | relative_url }}">⚙ Settings</a>
       <a href="{{ '/account.html#profile' | relative_url }}">👤 Profile</a>
-      <a href="{{ '/account.html#documents' | relative_url }}">📁 Documents</a>
+      <a href="{{ '/account.html#documents' | relative_url }}">📁 Do
+1000
+cuments</a>
       <a href="{{ '/account.html#messages' | relative_url }}">✉ Messages</a>
       <a href="#" id="logout-link">🚪 Log Out</a>
     </div>
@@ -235,6 +235,7 @@ wn-menu" id="account-dropdown" hidden>
   </div>
 
   <h2>Job Listings</h2>
+
   <div id="no-jobs-alert" role="status" aria-live="polite">
     <div>
       Sorry, there are currently no matching jobs. Check back soon or update
@@ -245,7 +246,7 @@ wn-menu" id="account-dropdown" hidden>
     </button>
   </div>
 
-  <div id="jobs-list"></div>
+  <div id="jobs-list" aria-live="polite"></div>
 </main>
 
 <section class="employers-section">
@@ -277,9 +278,17 @@ wn-menu" id="account-dropdown" hidden>
 </section>
 
 <script src="{{ '/assets/js/jobs-data.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+
 <script>
   (() => {
     const loginUrl = {{ '/login.html' | relative_url | jsonify }};
+
+    const navButton = document.getElementById('dynamic-user-nav');
+    const navText = document.getElementById('nav-button-text');
+    const dropdown = document.getElementById('account-dropdown');
+    const jobsList = document.getElementById('jobs-list');
+    const alertBox = document.getElementById('no-jobs-alert');
+
     const isLoggedIn = () => {
       try {
         return localStorage.getItem('loggedIn') === 'true';
@@ -287,12 +296,6 @@ wn-menu" id="account-dropdown" hidden>
         return false;
       }
     };
-
-    const navButton = document.getElementById('dynamic-user-nav');
-    const navText = document.getElementById('nav-button-text');
-    const dropdown = document.getElementById('account-dropdown');
-    const jobsList = document.getElementById('jobs-list');
-    const alertBox = document.getElementById('no-jobs-alert');
 
     function setDropdownOpen(open) {
       dropdown.hidden = !open;
@@ -320,22 +323,18 @@ wn-menu" id="account-dropdown" hidden>
       event.preventDefault();
 
       try {
-
-1000
         localStorage.removeItem('loggedIn');
       } catch (error) {
-        // Continue to the login page even if storage is unavailable.
+        // Continue to the login page if storage is unavailable.
       }
 
       window.location.href = loginUrl;
     });
 
-    function getJobs() {
-      return Array.isArray(window.jobsData) ? window.jobsData : [];
-    }
-
     function getTags(job) {
-      if (Array.isArray(job.tags)) return job.tags;
+      if (Array.isArray(j
+1000
+ob.tags)) return job.tags;
       if (typeof job.tags === 'string') return job.tags.split(',');
       return [];
     }
@@ -343,6 +342,13 @@ wn-menu" id="account-dropdown" hidden>
     function getWage(job) {
       const wage = String(job.wage || '').replace(/[^0-9.]/g, '');
       return Number.parseFloat(wage) || 0;
+    }
+
+    function updateEmptyState() {
+      const visibleCards = [...jobsList.querySelectorAll('.job-card')]
+        .filter((card) => !card.hidden);
+
+      alertBox.style.display = visibleCards.length === 0 ? 'block' : 'none';
     }
 
     function renderJobs(jobs) {
@@ -372,10 +378,14 @@ wn-menu" id="account-dropdown" hidden>
         meta.className = 'job-meta-row';
 
         const age = document.createElement('span');
-        age.textContent = job.minAge ? `Age: ${job.minAge}+` : 'Age not specified';
+        age.textContent = job.minAge
+          ? `Age: ${job.minAge}+`
+          : 'Age not specified';
         meta.appendChild(age);
 
-        getTags(job).forEach((tag) => {
+        const tags = getTags(job);
+
+        tags.forEach((tag) => {
           const badge = document.createElement('span');
           badge.className = 'job-badge';
           badge.textContent = String(tag).trim();
@@ -385,7 +395,7 @@ wn-menu" id="account-dropdown" hidden>
         card.dataset.age = String(job.minAge || '');
         card.dataset.location = String(job.location || '').toLowerCase();
         card.dataset.wage = String(getWage(job));
-        card.dataset.tags = getTags(job).join(',').toLowerCase();
+        card.dataset.tags = tags.join(',').toLowerCase();
 
         card.append(title, company, location, wage, meta);
 
@@ -404,14 +414,15 @@ wn-menu" id="account-dropdown" hidden>
 
     function filterJobs() {
       const ageValue = document.getElementById('filter-age').value;
-      const locationValue = document.getElementById('filter-location').value
-        .trim()
+      const locationValue = document
+        .getElementById('filter-location')
+        .value.trim()
         .toLowerCase();
-      const wageValue = Number.parseFloat(
-        document.getElementById('filter-wage').value
-      ) || 0;
-      const tagValue = document.getElementById('filter-tag').value
-        .trim()
+      const wageValue =
+        Number.parseFloat(document.getElementById('filter-wage').value) || 0;
+      const tagValue = document
+        .getElementById('filter-tag')
+        .value.trim()
         .toLowerCase();
 
       const selectedAge = ageValue.startsWith('18-25')
@@ -439,26 +450,32 @@ wn-menu" id="account-dropdown" hidden>
       updateEmptyState();
     }
 
-    function updateEmptyState() {
-      const visibleCards = [...jobsList.querySelectorAll('.job-card')]
-        .filter((card) => !card.hidden);
-
-      alertBox.style.display = visibleCards.length === 0 ? 'block' : 'none';
-    }
-
     function clearFilters() {
       document.getElementById('filter-age').value = '';
-      document.getElementById('filter-loca
-2b2
-tion').value = '';
+      document.getElementById('filter-location').value = '';
       document.getElementById('filter-wage').value = '';
       document.getElementById('filter-tag').value = '';
       filterJobs();
     }
 
-    document.getElementById('apply-filter').addEventListener('click', filterJobs);
-    document.getElementById('clear-filters').addEventListener('click', clearFilters);
+    document
+      .getElementById('apply-filter')
+      .addEventListener('click', filterJobs);
 
-    renderJobs(getJobs());
+    document
+      .getElementById('clear-
+380
+filters')
+      .addEventListener('click', clearFilters);
+
+    const jobs = window.jobsData;
+
+    if (Array.isArray(jobs)) {
+      renderJobs(jobs);
+    } else {
+      alertBox.style.display = 'none';
+      jobsList.textContent =
+        'Jobs could not be loaded. Please check the jobs data file and try again.';
+    }
   })();
 </script>
