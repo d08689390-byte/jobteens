@@ -11,238 +11,351 @@ title: Account - JobTeens
   .tab-panel { display: none; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 5px 5px; }
   .tab-panel.active { display: block; }
   .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-  .form-group input, .form-group textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; max-width: 400px; }
+  .form-group input:not([type="checkbox"]), .form-group textarea {
+    padding: 8px; border: 1px solid #ccc; border-radius: 4px; max-width: 400px;
+  }
   .upload-dropzone { border: 2px dashed #0076df; padding: 30px; text-align: center; background: #f4f9ff; border-radius: 6px; cursor: pointer; margin-bottom: 20px; }
   .doc-list-item { display: flex; justify-content: space-between; background: #f9f9f9; padding: 10px; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px; }
   .btn-save { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 4px; cursor: pointer; align-self: flex-start; }
 </style>
-
 
 <main class="page-content account-layout">
   <h1>Your Account Dashboard</h1>
   <div id="account-message" role="status" aria-live="polite">Checking your sign-in...</div>
 
   <section id="account-dashboard" style="display:none;">
-    <!-- Navigation Tabs -->
-    <div class="tab-buttons" role="tablist">
-      <button class="tab-btn active" onclick="switchTab('profile', this)" role="tab">Profile</button>
-      <button class="tab-btn" onclick="switchTab('documents', this)" role="tab">Documents & CVs</button>
-      <button class="tab-btn" onclick="switchTab('settings', this)" role="tab">Settings</button>
+    <div class="tab-buttons" role="tablist" aria-label="Account sections">
+      <button
+        type="button"
+        class="tab-btn active"
+        id="tab-profile"
+        aria-selected="true"
+        aria-controls="panel-profile"
+        role="tab"
+        onclick="switchTab('profile', this)"
+      >Profile</button>
+      <button
+        type="button"
+        class="tab-btn"
+        id="tab-documents"
+        aria-selected="false"
+        aria-controls="panel-documents"
+        role="tab"
+        onclick="switchTab('documents', this)"
+      >Documents &amp; CVs</button>
+      <button
+        type="button"
+        class="tab-btn"
+        id="tab-settings"
+        aria-selected="false"
+        aria-controls="panel-settings"
+        role="tab"
+        onclick="switchTab('settings', this)"
+      >Settings</button>
     </div>
 
-    <!-- Tab Panels -->
-    <!-- PROFILE TAB -->
-    <div id="panel-profile" class="tab-panel active" role="tabpanel">
+    <div id="panel-profile" class="tab-panel active" role="tabpanel" aria-labelledby="tab-profile">
       <h3>Profile Details</h3>
-      <form onsubmit="event.preventDefault(); alert('Profile Updated!');">
+      <form id="profile-form">
         <div class="form-group">
           <label for="prof-name">Full Name</label>
-          <input type="text" id="prof-name" value="Alex Smith">
+          <input type="text" id="prof-name" name="fullName">
         </div>
+
         <div class="form-group">
           <label for="prof-email">Email Address</label>
-          <input type="email" id="prof-email" value="alex@example.com" readonly style="background:#eee;">
+          <input type="email" id="prof-email" name="email" readonly style="background:#eee;">
         </div>
+
         <div class="form-group">
           <label for="prof-bio">Short Bio</label>
-          <input id="prof-bio" rows="3"></input>
+          <textarea id="prof-bio" name="bio" rows="3"></textarea>
         </div>
+
         <button type="submit" class="btn-save">Save Profile</button>
       </form>
     </div>
 
-    <!-- DOCUMENTS TAB -->
-    <div id="panel-documents" class="tab-panel" role="tabpanel">
+    <div id="panel-documents" class="tab-panel" role="tabpanel" aria-labelledby="tab-documents">
       <h3>Manage Documents</h3>
-      <div class="upload-dropzone" onclick="document.getElementById('file-upload-input').click()">
-        <p style="margin: 0 0 10px; font-weight: bold; color: #0076df;">Click or Drag files here to upload</p>
-        <span style="font-size: 12px; color: #666;">Supports PDF, DOCX (Max 5MB)</span>
-        <input type="file" id="file-upload-input" style="display:none;" onchange="alert('File selected: ' + this.files[0].name)">
-      </div>
+      <label class="upload-dropzone" for="file-upload-input">
+        <p style="margin: 0 0 10px; font-weight: bold; color: #0076df;">Click or drag files here to upload</p>
+        <span style="font-size: 12px; color: #666;">Supports PDF and DOCX (max 5 MB)</span>
+        <input
+          type="file"
+          id="file-upload-input"
+          accept=".pdf,.docx"
+          hidden
+        >
+      </label>
+      <p id="file-upload-message" role="status" aria-live="polite"></p>
 
       <h4>Your Files</h4>
       <div id="uploaded-files-list">
-        <div class="doc-list-item">
-          <a href="#" style="color:red; font-size:13px;">Delete</a>
-        </div>
-        <div class="doc-list-item">
-          <a href="#" style="color:red; font-size:13px;">Delete</a>
-        </div>
+        <p>No files uploaded yet.</p>
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
-    <div id="panel-settings" class="tab-panel" role="tabpanel">
-      <h3>Preferences & Safety</h3>
+    <div id="panel-settings" class="tab-panel" role="tabpanel" aria-labelledby="tab-settings">
+      <h3>Preferences &amp; Safety</h3>
+
       <div class="form-group">
         <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-          <input type="checkbox" checked> Receive instant email notifications for new job matches
+          <input type="checkbox">
+          Receive instant email notifications for new job matches
         </label>
       </div>
+
       <div class="form-group">
         <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-          <input type="checkbox"> Make my profile visible to verified employers
+          <input type="checkbox">
+          Make my profile visible to verified employers
         </label>
       </div>
+
       <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-        <button id="logout-button" type="button" onclick="authLogout() style="padding:10px 15px; background:#ef4444; color:white; border:none; border-radius:4px; cursor:pointer;">Log out</button>
+        <button
+          id="logout-button"
+          type="button"
+          style="padding:10px 15px; background:#ef4444; color:white; border:none; border-radius:4px; cursor:pointer;"
+        >Log out</button>
       </div>
     </div>
-<!-- Password Reminder Modal -->
-<div id="jt-password-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:99999; align-items:center; justify-content:center; font-family:sans-serif;">
-  <div style="background:#fff; padding:24px; border-radius:10px; max-width:420px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-    <h3 style="margin:0 0 10px;">Set a Password for Your Account</h3>
-    <p id="jt-password-text" style="color:#444; line-height:1.5; margin-bottom:20px;"></p>
-    <div style="display:flex; gap:10px; justify-content:flex-end;">
-      <button id="jt-ignore-btn" type="button" style="padding:9px 14px; border:1px solid #ccc; background:#f8f8f8; border-radius:6px; cursor:pointer;">
-        Ignore Suggestion
-      </button>
-      <button id="jt-set-btn" type="button" style="padding:9px 16px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
-        Set Password
-      </button>
+
+    <div
+      id="jt-password-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="jt-password-heading"
+      style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:99999; align-items:center; justify-content:center; font-family:sans-serif;"
+    >
+      <div style="background:#fff; padding:24px; border-radius:10px; max-width:420px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+        <h3 id="jt-password-heading" style="margin:0 0 10px;">Set a Password for Your Account</h3>
+        <p id="jt-password-text" style="color:#444; line-height:1.5; margin-bottom:20px;"></p>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button
+            id="jt-ignore-btn"
+            type="button"
+            style="padding:9px 14px; border:1px solid #ccc; background:#f8f8f8; border-radius:6px; cursor:pointer;"
+          >Ignore Suggestion</button>
+          <button
+            id="jt-set-btn"
+            type="button"
+            style="padding:9px 16px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;"
+          >Set Password</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   </section>
-<!-- Password Reminder Modal -->
 </main>
+
 <script>
-async function handleUserAccount(auth0Client) {
-  const user = await auth0Client.getUser();
-  if (!user) return;
+  const SIGNUP_MARKER_KEY = 'jobteens_signup_started_at';
+  const AUTH0_NAMESPACE = 'https://jobteens.co.uk';
 
-  // --- 1. AUTOFILL PROFILE DETAILS ON FIRST SOCIAL LOGIN ---
-  // Update these selectors to match your actual input IDs/names in account.html
-  const nameInput = document.querySelector('input[name="fullName"], #full-name');
-  const emailInput = document.querySelector('input[name="email"], #email-address');
-  const bioInput = document.querySelector('textarea[name="bio"], #short-bio');
+  function consumeRecentSignupMarker() {
+    const startedAt = Number(sessionStorage.getItem(SIGNUP_MARKER_KEY));
+    sessionStorage.removeItem(SIGNUP_MARKER_KEY);
 
-  // Only autofill if the user hasn't saved custom profile data yet
-  const isNewProfile = !localStorage.getItem(`jobteens_profile_saved_${user.sub}`);
-  
-  if (isNewProfile) {
-    if (nameInput && (!nameInput.value || nameInput.value === 'Alex Smith')) {
-      nameInput.value = user.name || `${user.given_name || ''} ${user.family_name || ''}`.trim();
-    }
-    if (emailInput && (!emailInput.value || emailInput.value === 'alex@example.com')) {
-      emailInput.value = user.email || '';
-    }
-    if (bioInput && !bioInput.value && user.nickname) {
-      bioInput.value = `Hi, I'm ${user.given_name || user.nickname}! Looking for opportunities on JobTeens.`;
-    }
-    // Optional: Automatically trigger your existing saveProfile() function here
+    // Ignore stale markers if signup was interrupted.
+    const markerIsRecent =
+      Number.isFinite(startedAt) &&
+      startedAt > 0 &&
+      Date.now() - startedAt < 10 * 60 * 1000;
+
+    return markerIsRecent;
   }
 
-  // --- 2. CHECK 3-DAY PASSWORD REQUIREMENT ---
-  const namespace = 'https://jobteens.co.uk';
-  const hasPassword = user[`${namespace}has_password`];
-  const isSocial = user[`${namespace}is_social`];
-  const firstSocialLogin = user[`${namespace}first_social_login`];
+  function isSocialAccount(user) {
+    const claim = user[`${AUTH0_NAMESPACE}/is_social`];
 
-  if (isSocial && !hasPassword && firstSocialLogin) {
-    const msInDay = 1000 * 60 * 60 * 24;
-    const daysElapsed = (Date.now() - firstSocialLogin) / msInDay;
+    if (typeof claim === 'boolean') {
+      return claim;
+    }
 
-    const modal = document.getElementById('password-prompt-modal');
-    const promptText = document.getElementById('password-prompt-text');
-    const ignoreBtn = document.getElementById('ignore-password-btn');
-    const setBtn = document.getElementById('set-password-btn');
+    // Auth0 database users normally have an "auth0|" subject.
+    // Use your Auth0 custom claim if your connection setup differs.
+    return typeof user.sub === 'string' && !user.sub.startsWith('auth0|');
+  }
+
+  function populateProfileOnSignup(user, isSignup) {
+    // Never autofill on login, email signup, or when the signup marker is absent.
+    if (!isSignup || !isSocialAccount(user)) {
+      return;
+    }
+
+    const nameInput = document.getElementById('prof-name');
+    const emailInput = document.getElementById('prof-email');
+
+    const fullName =
+      user.name ||
+      [user.given_name, user.family_name].filter(Boolean).join(' ');
+
+    // Only use values actually returned by the social provider.
+    // Empty/missing values leave the corresponding fields blank.
+    if (nameInput && fullName) {
+      nameInput.value = fullName;
+    }
+
+    if (emailInput && user.email) {
+      emailInput.value = user.email;
+    }
+
+    // Do not synthesize a bio from a nickname or other unrelated claim.
+  }
+
+  async function showPasswordReminder(user) {
+    const hasPassword = user[`${AUTH0_NAMESPACE}/has_password`];
+    const isSocial = user[`${AUTH0_NAMESPACE}/is_social`];
+    const firstSocialLogin = user[`${AUTH0_NAMESPACE}/first_social_login`];
+
+    if (!isSocial || hasPassword || !firstSocialLogin) {
+      return;
+    }
+
+    const firstLoginTime = Date.parse(firstSocialLogin);
+    if (!Number.isFinite(firstLoginTime)) {
+      return;
+    }
+
+    const daysElapsed = (Date.now() - firstLoginTime) / (1000 * 60 * 60 * 24);
+    const modal = document.getElementById('jt-password-modal');
+    const promptText = document.getElementById('jt-password-text');
+    const ignoreButton = document.getElementById('jt-ignore-btn');
+    const setButton = document.getElementById('jt-set-btn');
+
+    if (!modal || !promptText || !ignoreButton || !setButton) {
+      return;
+    }
 
     modal.style.display = 'flex';
 
     if (daysElapsed >= 3) {
-      // Day 3 or later: Lock out the ignore button
-      promptText.textContent = "Sorry, you can no longer ignore this message. Please set a password to continue using your account.";
-      ignoreBtn.disabled = true;
-      ignoreBtn.style.opacity = '0.5';
-      ignoreBtn.style.cursor = 'not-allowed';
-      ignoreBtn.title = "Sorry you can no longer ignore this message, please set a password";
-      
-      // Also alert if they try clicking the disabled area
-      ignoreBtn.parentElement.addEventListener('click', (e) => {
-        if (e.target === ignoreBtn) {
-          alert("Sorry you can no longer ignore this message, please set a password");
-        }
-      });
+      promptText.textContent =
+        'You can no longer ignore this reminder. Please set a password to continue using your account.';
+      ignoreButton.disabled = true;
+      ignoreButton.style.opacity = '0.5';
+      ignoreButton.style.cursor = 'not-allowed';
+      ignoreButton.title = 'Please set a password to continue.';
     } else {
-      // Days 0–2: Allow dismissing for the current login session
       const daysLeft = Math.ceil(3 - daysElapsed);
-      promptText.textContent = `You signed in with a social account and haven't set a password yet. You can ignore this for ${daysLeft} more day(s).`;
-      
-      ignoreBtn.addEventListener('click', () => {
+      promptText.textContent =
+        `You signed in with a social account and have not set a password yet. ` +
+        `You can ignore this reminder for ${daysLeft} more day(s).`;
+
+      ignoreButton.addEventListener('click', () => {
         modal.style.display = 'none';
-      });
+      }, { once: true });
     }
 
-    setBtn.addEventListener('click', () => {
-      // Redirect to your password setup / Auth0 password reset or account linking flow
-      triggerSetPasswordFlow(user.email);
+    setButton.addEventListener('click', async () => {
+      setButton.disabled = true;
+      try {
+        await triggerSetPasswordFlow(user.email);
+      } catch (error) {
+        alert('Unable to send the password email. Please try again later.');
+        console.error(error);
+      } finally {
+        setButton.disabled = false;
+      }
+    }, { once: true });
+  }
+
+  async function triggerSetPasswordFlow(email) {
+    if (!email) {
+      throw new Error('No email address is available for this account.');
+    }
+
+    const response = await fetch(
+      'https://dev-yvlegzq228y4jjem.uk.auth0.com/dbconnections/change_password',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: '7RVrz4QVQnx5KYvWQgbFgAqpYrgmK19I',
+          email,
+          connection: 'Username-Password-Authentication'
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Password request failed with status ${response.status}.`);
+    }
+
+    alert(`We've sent a password setup link to ${email}. Please check your inbox.`);
+  }
+
+  function switchTab(tabId, button) {
+    document.querySelectorAll('.tab-btn').forEach((tabButton) => {
+      const isSelected = tabButton === button;
+      tabButton.classList.toggle('active', isSelected);
+      tabButton.setAttribute('aria-selected', String(isSelected));
+    });
+
+    document.querySelectorAll('.tab-panel').forEach((panel) => {
+      panel.classList.toggle('active', panel.id === `panel-${tabId}`);
     });
   }
-}
 
-async function triggerSetPasswordFlow(email) {
-  // Triggers Auth0's password reset/creation email for their email address
-  // Note: Ensure the Database connection (Username-Password-Authentication) is enabled for your app
-  await fetch(`dev-yvlegzq228y4jjem.uk.auth0.com`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id: '7RVrz4QVQnx5KYvWQgbFgAqpYrgmK19I',
-      email: email,
-      connection: 'Username-Password-Authentication'
-    })
+  document.getElementById('profile-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    alert('Connect this form to your profile-saving endpoint.');
   });
-  alert(`We've sent a password setup link to ${email}. Please check your inbox!`);
-}
 
+  document.getElementById('file-upload-input').addEventListener('change', (event) => {
+    const file = event.target.files && event.target.files[0];
+    const message = document.getElementById('file-upload-message');
 
-
-
-
-
-
-
-
-  
-  (async () => {
-    const client = await window.auth0Promise;
-
-    // 1. Protect the dashboard: redirect to login.html if not signed in
-    if (!(await client.isAuthenticated())) {
-      window.location.replace('/login.html');
+    if (!file) {
+      message.textContent = '';
       return;
     }
 
-    // 2. Load the authenticated user's profile
-    const user = await client.getUser();
+    if (file.size > 5 * 1024 * 1024) {
+      message.textContent = 'The file is larger than 5 MB.';
+      event.target.value = '';
+      return;
+    }
 
-    // Update status banner (give your "Checking your sign-in..." element id="auth-status")
-    const statusEl = document.getElementById('auth-status');
-    if (statusEl) statusEl.textContent = `Signed in as ${user.email}`;
-
-    // Populate your existing Profile Details inputs (add id="profile-name" and id="profile-email" to your inputs)
-    const nameInput = document.getElementById('profile-name');
-    const emailInput = document.getElementById('profile-email');
-    if (nameInput) nameInput.value = user.name || user.nickname || '';
-    if (emailInput) emailInput.value = user.email || '';
-  })();
-</script>
-
-
-<script>
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-    
-    event.currentTarget.classList.add('active');
-    document.getElementById('panel-' + tabId).classList.add('active');
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      document.getElementById('account-message').style.display = 'none';
-      document.getElementById('account-dashboard').style.display = 'block';
-    }, 500);
+    message.textContent = `Selected file: ${file.name}. Upload handling still needs to be connected.`;
   });
+
+  (async function initializeAccountPage() {
+    const message = document.getElementById('account-message');
+    const dashboard = document.getElementById('account-dashboard');
+
+    try {
+      const client = await window.auth0Promise;
+
+      if (!client || !(await client.isAuthenticated())) {
+        window.location.replace('/login.html');
+        return;
+      }
+
+      const user = await client.getUser();
+      if (!user) {
+        window.location.replace('/login.html');
+        return;
+      }
+
+      // Consume the marker once so later logins do not trigger autofill.
+      const isSignup = consumeRecentSignupMarker();
+      populateProfileOnSignup(user, isSignup);
+
+      message.textContent = `Signed in as ${user.email || 'your account'}`;
+      dashboard.style.display = 'block';
+
+      document.getElementById('logout-button').addEventListener('click', () => {
+        client.logout({
+          logoutParams: { returnTo: window.location.origin }
+        });
+      });
+
+      await showPasswordReminder(user);
+    } catch (error) {
+      console.error('Unable to initialize the account page:', error);
+      message.textContent = 'Unable to load your account. Please try again.';
+    }
+  })();
 </script>
