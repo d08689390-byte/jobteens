@@ -185,16 +185,15 @@ title: JobTeens
     </button>
 
     <div class="nav-dropdown-menu" id="account-dropdown" hidden>
-      <a href="{{ '/account.html#settings' | relative_url }}">⚙ Settings</a>
-      <a href="{{ '/account.html#profile' | relative_url }}">👤 Profile</a>
-      <a href="{{ '/account.html#documents' | relative_url }}">📁 Do
-1000
-cuments</a>
-      <a href="{{ '/account.html#messages' | relative_url }}">✉ Messages</a>
-      <a href="#" id="logout-link">🚪 Log Out</a>
+      <a href="{{ '/account.html#settings' | relative_url }}"><span aria-hidden="true">⚙</span> Settings</a>
+      <a href="{{ '/account.html#profile' | relative_url }}"><span aria-hidden="true">👤</span> Profile</a>
+      <a href="{{ '/account.html#documents' | relative_url }}"><span aria-hidden="true">📁</span> Documents</a>
+      <a href="{{ '/account.html#messages' | relative_url }}"><span aria-hidden="true">✉</span> Messages</a>
+      <button type="button" id="logout-link" class="dropdown-logout-btn"><span aria-hidden="true">🚪</span> Log Out</button>
     </div>
   </nav>
 </header>
+
 
 <main id="site-content">
   <h1>JobTeens</h1>
