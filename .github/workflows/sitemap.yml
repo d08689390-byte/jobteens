@@ -3,7 +3,10 @@ name: Generate Sitemap
 on:
   push:
     branches: [ main ] # Change to 'master' if that is your default branch
-  workflow_dispatch: # Allows you to trigger this manually from the Actions tab
+    paths:
+      - '**.html'
+      - '.github/workflows/sitemap.yml'
+  workflow_dispatch: # Enables the "Run workflow" button in the Actions tab
 
 permissions:
   contents: write
