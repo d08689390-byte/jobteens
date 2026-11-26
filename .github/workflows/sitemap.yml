@@ -26,7 +26,7 @@ jobs:
           rm -f sitemap.xml
           
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
+          echo '<urlset xmlns="http://sitemaps.org/schema/sitemaps/0.9">' >> sitemap.xml
           
           # Find all .html files, ignoring hidden folders (.*), Jekyll folders (_*), and private pages
           find . \( -path '*/.*' -o -path '*/_*' \) -prune -o \
