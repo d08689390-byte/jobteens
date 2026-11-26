@@ -26,16 +26,37 @@ jobs:
           rm -f sitemap.xml
           
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
           
-          # Find all .html files, ignoring hidden folders like .git or .github
-          find . -path '*/.*' -prune -o -name '*.html' -print | sort | while read -r file; do
-            # Strip leading './' and trailing '.html' for the URL string only
+          # Find all .html files, ignoring hidden folders (.*), Jekyll folders (_*), and private pages
+          find . \( -path '*/.*' -o -path '*/_*' \) -prune -o \
+            -name '*.html' \
+            ! -name '404.html' \
+            ! -name 'account.html' \
+            ! -name 'employer-dashboard.html' \
+            ! -name 'employer-messages.html' \
+            ! -name 'forgot-password.html' \
+            ! -name 'messages.html' \
+            ! -name 'post-job.html' \
+            ! -name 'teen-dashboard.html' \
+            ! -name 'upload-cv.html' \
+            -print | sort | while read -r file; do
+            
+            # Strip leading './' and trailing '.html'
             clean_path="${file#./}"
             clean_path="${clean_path%.html}"
             
+            # Map root 'index' to the root domain, and any nested 'folder/index' to 'folder/'
+            if [ "$clean_path" = "index" ]; then
+              url="${DOMAIN}/"
+            elif [[ "$clean_path" == */index ]]; then
+              url="${DOMAIN}/${clean_path%/index}/"
+            else
+              url="${DOMAIN}/${clean_path}"
+            fi
+            
             echo "  <url>" >> sitemap.xml
-            echo "    <loc>${DOMAIN}/${clean_path}</loc>" >> sitemap.xml
+            echo "    <loc>${url}</loc>" >> sitemap.xml
             echo "  </url>" >> sitemap.xml
           done
           
