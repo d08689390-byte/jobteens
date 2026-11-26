@@ -26,7 +26,7 @@ jobs:
           rm -f sitemap.xml
           
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
+          echo '<urlset xmlns="http://sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
           
           # Find all .html files, ignoring hidden folders like .git or .github
           find . -path '*/.*' -prune -o -name '*.html' -print | sort | while read -r file; do
