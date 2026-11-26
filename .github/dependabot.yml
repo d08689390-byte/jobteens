@@ -11,6 +11,7 @@ updates:
     schedule:
       interval: "weekly"
 
+
   # Check for GitHub Actions workflow updates
   - package-ecosystem: "github-actions"
     directory: "/"
