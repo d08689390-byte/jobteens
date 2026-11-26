@@ -1,39 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://sitemaps.org">
   <url>
-    <loc>https://jobteens.co.uk/_layouts/default</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/account</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/employer-dashboard</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/employer-messages</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/forgot-password</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/index</loc>
+    <loc>https://jobteens.co.uk/</loc>
   </url>
   <url>
     <loc>https://jobteens.co.uk/login</loc>
   </url>
   <url>
-    <loc>https://jobteens.co.uk/messages</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/post-job</loc>
-  </url>
-  <url>
     <loc>https://jobteens.co.uk/signup</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/teen-dashboard</loc>
-  </url>
-  <url>
-    <loc>https://jobteens.co.uk/upload-cv</loc>
   </url>
 </urlset>
